@@ -1,0 +1,1173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before We Build Your CRM</title>
+<meta name="description" content="A short discovery questionnaire so your CRM gets built around how you actually work.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+
+:root {
+  --stock:      #EDEEE9;
+  --card:       #FBFBF8;
+  --field:      #F4F5F0;
+  --ink:        #16181A;
+  --ink-soft:   #5C615C;
+  --ink-faint:  #8A8F88;
+  --rule:       #D6D8CF;
+  --rule-soft:  #E3E5DD;
+  --tag:        #E0A008;
+  --tag-ink:    #16181A;
+  --tag-soft:   #F6E6BC;
+  --approve:    #1F5C4A;
+
+  --measure: 66ch;
+  --f-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --f-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --f-code: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --stock:     #121412;
+    --card:      #191C19;
+    --field:     #1F231F;
+    --ink:       #ECEEE7;
+    --ink-soft:  #A2A89F;
+    --ink-faint: #767C74;
+    --rule:      #333831;
+    --rule-soft: #262A25;
+    --tag:       #F0B429;
+    --tag-ink:   #16181A;
+    --tag-soft:  #3A3018;
+    --approve:   #57B394;
+  }
+}
+
+:root[data-theme="dark"] {
+  --stock:     #121412;
+  --card:      #191C19;
+  --field:     #1F231F;
+  --ink:       #ECEEE7;
+  --ink-soft:  #A2A89F;
+  --ink-faint: #767C74;
+  --rule:      #333831;
+  --rule-soft: #262A25;
+  --tag:       #F0B429;
+  --tag-ink:   #16181A;
+  --tag-soft:  #3A3018;
+  --approve:   #57B394;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--stock);
+  color: var(--ink);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.sheet {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 4vw, 3rem) 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3.25rem);
+}
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 1.75rem;
+}
+
+.eyebrow {
+  font-family: var(--f-code);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.eyebrow .dot {
+  width: 6px; height: 6px;
+  background: var(--tag);
+  display: inline-block;
+}
+
+h1 {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.standfirst {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: 1.08rem;
+  color: var(--ink-soft);
+}
+
+.howto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  margin-top: 0.5rem;
+}
+
+.howto div {
+  background: var(--card);
+  padding: 0.9rem 1.1rem;
+}
+
+.howto dt {
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-bottom: 0.3rem;
+}
+
+.howto dd {
+  margin: 0;
+  font-size: 0.94rem;
+  line-height: 1.45;
+}
+
+.print-only { display: none; }
+
+.star {
+  color: var(--tag);
+  font-family: var(--f-display);
+  font-weight: 700;
+}
+
+/* ---------- sections ---------- */
+
+section { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.sec-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 1rem;
+  align-items: start;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.9rem;
+}
+
+.sec-letter {
+  font-family: var(--f-code);
+  font-weight: 600;
+  font-size: 1rem;
+  background: var(--tag);
+  color: var(--tag-ink);
+  padding: 0.35rem 0.7rem;
+  line-height: 1;
+  align-self: center;
+}
+
+.sec-title {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  letter-spacing: -0.015em;
+  margin: 0;
+  align-self: center;
+}
+
+.sec-note {
+  grid-column: 2;
+  margin: 0.4rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  max-width: var(--measure);
+}
+
+/* ---------- questions ---------- */
+
+.q {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 0 1rem;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.q-code {
+  font-family: var(--f-code);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--ink-faint);
+  padding-top: 0.28rem;
+  letter-spacing: 0.02em;
+}
+
+.q-body { display: flex; flex-direction: column; gap: 0.55rem; min-width: 0; }
+
+.q-text {
+  margin: 0;
+  font-size: 1.02rem;
+  max-width: var(--measure);
+}
+
+.q-text .star { margin-right: 0.3rem; }
+
+.q-hint {
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--ink-faint);
+  max-width: var(--measure);
+}
+
+.answer {
+  background: var(--field);
+  border: 1px solid var(--rule-soft);
+  border-left: 3px solid var(--rule);
+  min-height: 4.2rem;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--f-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--ink);
+  outline: none;
+}
+
+.answer.tall { min-height: 7rem; }
+
+.answer:focus {
+  border-left-color: var(--tag);
+  box-shadow: 0 0 0 2px var(--tag-soft);
+}
+
+.answer:empty::before {
+  content: attr(data-ph);
+  color: var(--ink-faint);
+  font-style: italic;
+}
+
+/* ---------- closing ---------- */
+
+.closer {
+  border: 2px solid var(--ink);
+  padding: clamp(1.25rem, 3vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  break-inside: avoid;
+}
+
+.closer h2 {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.closer p { margin: 0; max-width: var(--measure); color: var(--ink-soft); }
+
+.sign {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 1.5rem;
+  margin-top: 0.75rem;
+}
+
+.sign div {
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 0.4rem;
+  min-height: 2.4rem;
+}
+
+.sign span {
+  display: block;
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 34rem) {
+  .q { grid-template-columns: 1fr; gap: 0.4rem; }
+  .q-code { padding-top: 0; }
+  .sec-note { grid-column: 1 / -1; }
+}
+
+@media print {
+  body { background: #fff; color: #000; font-size: 11.5pt; }
+  .sheet { padding: 0; gap: 1.75rem; max-width: none; }
+  .answer { background: #fff; border-color: #bbb; border-left-color: #888; min-height: 3.4rem; }
+  .no-print { display: none; }
+  section { break-inside: auto; }
+  .sec-head { break-after: avoid; }
+  .answer:empty::before { content: ""; }
+  .screen-only { display: none; }
+  .print-only { display: block; }
+}
+
+
+/* ---------- form chrome ---------- */
+
+.progress {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--stock);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.7rem 0;
+  margin-bottom: -0.5rem;
+}
+
+.progress-inner {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.progress-count {
+  font-family: var(--f-code);
+  font-size: 0.74rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+  flex: 1 1 8rem;
+  height: 4px;
+  background: var(--rule-soft);
+  border: 1px solid var(--rule);
+  min-width: 6rem;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--tag);
+  transition: width 0.25s ease;
+}
+
+.sec-nav { display: flex; gap: 0.15rem; }
+
+.sec-nav a {
+  font-family: var(--f-code);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--ink-faint);
+  text-decoration: none;
+  padding: 0.25rem 0.45rem;
+  border: 1px solid transparent;
+}
+
+.sec-nav a:hover, .sec-nav a:focus-visible {
+  color: var(--ink);
+  border-color: var(--rule);
+  outline: none;
+}
+
+.sec-nav a.done { color: var(--tag); }
+
+.saved-flag {
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+
+.saved-flag.show { opacity: 1; }
+
+textarea.answer {
+  width: 100%;
+  display: block;
+  resize: vertical;
+  overflow: hidden;
+  border-radius: 0;
+  -webkit-appearance: none;
+}
+
+textarea.answer::placeholder { color: var(--ink-faint); font-style: italic; }
+
+.answer.missing { border-left-color: #B4453A; }
+
+label.q-text { display: block; cursor: pointer; }
+
+/* identity block */
+
+.whois {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.field label {
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.field input {
+  font-family: var(--f-body);
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+  background: var(--field);
+  color: var(--ink);
+  border: 1px solid var(--rule-soft);
+  border-left: 3px solid var(--rule);
+  border-radius: 0;
+  outline: none;
+}
+
+.field input:focus {
+  border-left-color: var(--tag);
+  box-shadow: 0 0 0 2px var(--tag-soft);
+}
+
+.field input.missing { border-left-color: #B4453A; }
+
+/* actions */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+button {
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  padding: 0.8rem 1.5rem;
+  border: 1px solid var(--ink);
+  border-radius: 0;
+  cursor: pointer;
+  background: var(--ink);
+  color: var(--stock);
+}
+
+button:hover { background: var(--tag); border-color: var(--tag); color: var(--tag-ink); }
+
+button:focus-visible { outline: 2px solid var(--tag); outline-offset: 2px; }
+
+button.ghost { background: transparent; color: var(--ink); border-color: var(--rule); }
+
+button.ghost:hover { background: transparent; border-color: var(--ink); color: var(--ink); }
+
+button[disabled] { opacity: 0.5; cursor: progress; }
+
+.status {
+  font-family: var(--f-display);
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.status.bad { color: #B4453A; }
+
+/* done panel */
+
+.done-panel { display: none; }
+.done-panel.show { display: flex; flex-direction: column; gap: 1rem; }
+body.submitted #intake { display: none; }
+body.submitted .progress { display: none; }
+
+.done-panel h2 {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+@media print {
+  .progress, .actions, .saved-flag, .sec-nav { display: none; }
+  textarea.answer { overflow: visible; }
+}
+
+</style>
+</head>
+<body>
+
+<div class="progress">
+  <div class="progress-inner">
+    <span class="progress-count"><span id="answered">0</span> / 41 answered</span>
+    <span class="progress-track"><span class="progress-fill" id="bar"></span></span>
+    <nav class="sec-nav" aria-label="Jump to section">
+      <a href="#sec-A" data-sec="A">A</a>
+      <a href="#sec-B" data-sec="B">B</a>
+      <a href="#sec-C" data-sec="C">C</a>
+      <a href="#sec-D" data-sec="D">D</a>
+      <a href="#sec-E" data-sec="E">E</a>
+      <a href="#sec-F" data-sec="F">F</a>
+      <a href="#sec-G" data-sec="G">G</a>
+      <a href="#sec-H" data-sec="H">H</a>
+    </nav>
+    <span class="saved-flag" id="savedFlag">Saved</span>
+  </div>
+</div>
+
+<form class="sheet" id="intake" novalidate>
+
+  <header class="masthead">
+    <div class="eyebrow"><span class="dot"></span> Discovery questionnaire &nbsp;&#183;&nbsp; CRM build</div>
+    <h1>Before we build your CRM</h1>
+    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your commission math, your line-review calendar &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
+    <dl class="howto">
+      <div>
+        <dt>Who fills this out</dt>
+        <dd>Whoever runs the day-to-day. Pull in a rep for Sections C and D if they know the workflow better.</dd>
+      </div>
+      <div>
+        <dt>Short on time</dt>
+        <dd>Answer the <span class="star">&#9733;</span> questions first &mdash; that's about fifteen minutes and enough to start.</dd>
+      </div>
+      <div>
+        <dt>You can stop anytime</dt>
+        <dd>Your answers save in this browser as you type. Close the tab, come back later, pick up where you left off.</dd>
+      </div>
+    </dl>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <div class="sec-letter">&#8212;</div>
+      <h2 class="sec-title">First, who are you</h2>
+    </div>
+    <div class="whois">
+      <div class="field">
+        <label for="_name">Your name</label>
+        <input type="text" id="_name" name="_name" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="_company">Company</label>
+        <input type="text" id="_company" name="_company" autocomplete="organization" required>
+      </div>
+      <div class="field">
+        <label for="_email">Email</label>
+        <input type="email" id="_email" name="_email" autocomplete="email" required>
+      </div>
+    </div>
+  </section>
+
+  <section id="sec-A">
+    <div class="sec-head">
+      <div class="sec-letter">A</div>
+      <h2 class="sec-title">The business</h2>
+      <p class="sec-note">The shape of the company. This decides what the system is even counting.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">A1</div>
+      <div class="q-body">
+        <label class="q-text" for="A1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>In one or two sentences: what does your company do, and who writes you the check?</label>
+        <textarea class="answer" id="A1" name="A1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">A2</div>
+      <div class="q-body">
+        <label class="q-text" for="A2"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>How do you get paid — commission on shipped sales, monthly retainer, project fee, or a mix? Roughly what&#x27;s the split?</label>
+        <textarea class="answer" id="A2" name="A2" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">A3</div>
+      <div class="q-body">
+        <label class="q-text" for="A3">How many brands/suppliers are you working with right now? How many in two years?</label>
+        <textarea class="answer" id="A3" name="A3" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">A4</div>
+      <div class="q-body">
+        <label class="q-text" for="A4"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Which retailers and distributors do you sell into?</label>
+        <p class="q-hint">Walmart, Sam&#x27;s, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane, C&amp;S…</p>
+        <textarea class="answer tall" id="A4" name="A4" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">A5</div>
+      <div class="q-body">
+        <label class="q-text" for="A5">Which categories/departments do you live in, and does the process differ between them?</label>
+        <textarea class="answer" id="A5" name="A5" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-B">
+    <div class="sec-head">
+      <div class="sec-letter">B</div>
+      <h2 class="sec-title">Who&#x27;s in it</h2>
+      <p class="sec-note">Logins and what each person is allowed to see. Easier to decide now than to unwind later.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">B1</div>
+      <div class="q-body">
+        <label class="q-text" for="B1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>List everyone who would log in, with their role. Who is the owner/admin?</label>
+        <textarea class="answer" id="B1" name="B1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">B2</div>
+      <div class="q-body">
+        <label class="q-text" for="B2"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Should anyone see only their own accounts? Who is allowed to see money — commissions, margins, what others earn?</label>
+        <textarea class="answer" id="B2" name="B2" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">B3</div>
+      <div class="q-body">
+        <label class="q-text" for="B3">Where does the work happen — phone in the field, laptop at a buyer meeting, desk? Roughly what % is mobile?</label>
+        <textarea class="answer" id="B3" name="B3" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">B4</div>
+      <div class="q-body">
+        <label class="q-text" for="B4">Would you ever want supplier clients to log in and see their own status?</label>
+        <textarea class="answer" id="B4" name="B4" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">B5</div>
+      <div class="q-body">
+        <label class="q-text" for="B5">Do you use contractors/1099 reps whose access should turn off when an engagement ends?</label>
+        <textarea class="answer" id="B5" name="B5" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-C">
+    <div class="sec-head">
+      <div class="sec-letter">C</div>
+      <h2 class="sec-title">What you keep track of</h2>
+      <p class="sec-note">Every field you name here becomes something you can sort, filter, and report on. Every one you forget becomes a note nobody reads.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">C1</div>
+      <div class="q-body">
+        <label class="q-text" for="C1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Send us the spreadsheets and documents you run the business on today. If you can&#x27;t send them, describe what&#x27;s in each.</label>
+        <textarea class="answer" id="C1" name="C1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">C2</div>
+      <div class="q-body">
+        <label class="q-text" for="C2"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>For a brand/supplier you represent, what do you need on file?</label>
+        <p class="q-hint">contacts, category, capacity, GS1/UPC ownership, certifications, insurance, EDI capability, freight terms, MOQs, lead times, supplier agreement status</p>
+        <textarea class="answer tall" id="C2" name="C2" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">C3</div>
+      <div class="q-body">
+        <label class="q-text" for="C3"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>For an individual item/SKU, what fields matter?</label>
+        <p class="q-hint">UPC, case pack, case cost, unit cost, suggested retail, margin, dims/weight, shelf life, item # once assigned, setup status</p>
+        <textarea class="answer tall" id="C3" name="C3" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">C4</div>
+      <div class="q-body">
+        <label class="q-text" for="C4">For a retailer contact, what do you track?</label>
+        <p class="q-hint">buyer, replen manager, dept &amp; category #, last contact, preferred channel, when they rotate out</p>
+        <textarea class="answer tall" id="C4" name="C4" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">C5</div>
+      <div class="q-body">
+        <label class="q-text" for="C5">What files pile up on a deal, and should they live in the system?</label>
+        <p class="q-hint">decks, spec sheets, photos, cut sheets, forecasts, sample tracking, signed agreements</p>
+        <textarea class="answer tall" id="C5" name="C5" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">C6</div>
+      <div class="q-body">
+        <label class="q-text" for="C6">What currently lives in your head, in text messages, or on a legal pad that should be somewhere everyone can see?</label>
+        <textarea class="answer" id="C6" name="C6" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-D">
+    <div class="sec-head">
+      <div class="sec-letter">D</div>
+      <h2 class="sec-title">How a deal moves</h2>
+      <p class="sec-note">Your pipeline, in your own vocabulary. We&#x27;ll build the stages to match what you say here, not the other way around.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">D1</div>
+      <div class="q-body">
+        <label class="q-text" for="D1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Walk a deal from first conversation to product on the shelf. Name each stage the way you&#x27;d say it out loud.</label>
+        <textarea class="answer" id="D1" name="D1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">D2</div>
+      <div class="q-body">
+        <label class="q-text" for="D2">What has to be true before a deal moves from one stage to the next?</label>
+        <textarea class="answer" id="D2" name="D2" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">D3</div>
+      <div class="q-body">
+        <label class="q-text" for="D3"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Where do deals die most often, and why?</label>
+        <textarea class="answer" id="D3" name="D3" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">D4</div>
+      <div class="q-body">
+        <label class="q-text" for="D4"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>How do line reviews and modular resets drive your calendar? Fixed review windows per category? How far ahead do you start?</label>
+        <textarea class="answer" id="D4" name="D4" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">D5</div>
+      <div class="q-body">
+        <label class="q-text" for="D5">After a buyer says yes, what happens next, and how much of it do you track?</label>
+        <p class="q-hint">item setup, supplier agreement, first PO, first ship, store count, replenishment, performance review</p>
+        <textarea class="answer tall" id="D5" name="D5" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">D6</div>
+      <div class="q-body">
+        <label class="q-text" for="D6">Typical time from first pitch to first PO? Longest one you&#x27;ve waited out?</label>
+        <textarea class="answer" id="D6" name="D6" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">D7</div>
+      <div class="q-body">
+        <label class="q-text" for="D7"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>What tasks happen on every single deal, in the same order, every time?</label>
+        <textarea class="answer" id="D7" name="D7" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-E">
+    <div class="sec-head">
+      <div class="sec-letter">E</div>
+      <h2 class="sec-title">Money</h2>
+      <p class="sec-note">Commission math is the part that&#x27;s different at every firm, and the part that&#x27;s most painful to bolt on afterward.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">E1</div>
+      <div class="q-body">
+        <label class="q-text" for="E1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Exactly how is commission calculated and when do you get paid?</label>
+        <p class="q-hint">% of shipped invoice, per unit, tiered, different per client/retailer — write the real rule including exceptions</p>
+        <textarea class="answer tall" id="E1" name="E1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">E2</div>
+      <div class="q-body">
+        <label class="q-text" for="E2">Should the system calculate and forecast commission, or just record what you were paid?</label>
+        <textarea class="answer" id="E2" name="E2" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">E3</div>
+      <div class="q-body">
+        <label class="q-text" for="E3">Do you split commission with anyone? How is the split figured?</label>
+        <textarea class="answer" id="E3" name="E3" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">E4</div>
+      <div class="q-body">
+        <label class="q-text" for="E4">Do you want to invoice clients out of this system, or does billing stay where it is?</label>
+        <textarea class="answer" id="E4" name="E4" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">E5</div>
+      <div class="q-body">
+        <label class="q-text" for="E5"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>What number do you most want to see the second you log in?</label>
+        <textarea class="answer" id="E5" name="E5" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-F">
+    <div class="sec-head">
+      <div class="sec-letter">F</div>
+      <h2 class="sec-title">Reminders and reporting</h2>
+      <p class="sec-note">What the system should chase you about, and what it should hand you at the end of the month.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">F1</div>
+      <div class="q-body">
+        <label class="q-text" for="F1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>What should the system nag you about, and how — email, text, or a list waiting when you log in?</label>
+        <textarea class="answer" id="F1" name="F1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">F2</div>
+      <div class="q-body">
+        <label class="q-text" for="F2">What do you send clients today, how often, in what format? Who builds it and how long does it take?</label>
+        <textarea class="answer" id="F2" name="F2" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">F3</div>
+      <div class="q-body">
+        <label class="q-text" for="F3">If you could only ever have one report, what would it show?</label>
+        <textarea class="answer" id="F3" name="F3" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">F4</div>
+      <div class="q-body">
+        <label class="q-text" for="F4"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>What falls through the cracks most often? Tell us about the last one that cost you.</label>
+        <textarea class="answer" id="F4" name="F4" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-G">
+    <div class="sec-head">
+      <div class="sec-letter">G</div>
+      <h2 class="sec-title">Systems and ground rules</h2>
+      <p class="sec-note">What this has to live alongside, what has to come across from the old way, and what the real constraints are.</p>
+    </div>
+
+    <div class="q">
+      <div class="q-code">G1</div>
+      <div class="q-body">
+        <label class="q-text" for="G1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>What software do you use today, and which of it is untouchable?</label>
+        <p class="q-hint">Retail Link, Luminate, NIQ/Circana, Excel, QuickBooks, Google Workspace/Outlook, Dropbox, DocuSign, EDI providers</p>
+        <textarea class="answer tall" id="G1" name="G1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G2</div>
+      <div class="q-body">
+        <label class="q-text" for="G2">Should email and calendar flow into the CRM so activity logs itself? Which provider is your email on?</label>
+        <textarea class="answer" id="G2" name="G2" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G3</div>
+      <div class="q-body">
+        <label class="q-text" for="G3">Where does existing data live, roughly how many records, and does history need to come across?</label>
+        <textarea class="answer" id="G3" name="G3" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G4</div>
+      <div class="q-body">
+        <label class="q-text" for="G4">Any confidentiality obligations to design around — NDAs with brands, retailer data that can&#x27;t be commingled between clients?</label>
+        <textarea class="answer" id="G4" name="G4" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G5</div>
+      <div class="q-body">
+        <label class="q-text" for="G5"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Have you tried a CRM before? Which one, and what specifically made you stop using it?</label>
+        <textarea class="answer" id="G5" name="G5" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G6</div>
+      <div class="q-body">
+        <label class="q-text" for="G6"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>When do you need this live, and is there a date that actually matters — line review, trade show, fiscal year?</label>
+        <textarea class="answer" id="G6" name="G6" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G7</div>
+      <div class="q-body">
+        <label class="q-text" for="G7">What budget range are you working with — one-time build, monthly, or both?</label>
+        <textarea class="answer" id="G7" name="G7" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+    <div class="q">
+      <div class="q-code">G8</div>
+      <div class="q-body">
+        <label class="q-text" for="G8"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>If the first version only did three things, and did them perfectly, which three?</label>
+        <textarea class="answer" id="G8" name="G8" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+  <section id="sec-H">
+    <div class="sec-head">
+      <div class="sec-letter">H</div>
+      <h2 class="sec-title">One last one</h2>
+    </div>
+
+    <div class="q">
+      <div class="q-code">H1</div>
+      <div class="q-body">
+        <label class="q-text" for="H1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>Six months after this is running, what has changed about your week? Describe a specific thing you no longer have to do.</label>
+        <textarea class="answer" id="H1" name="H1" rows="2"
+          data-star="true" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <div class="closer">
+    <h2>That's everything</h2>
+    <p>Send it over and we'll read it before we talk. If something didn't fit in a box &mdash; a spreadsheet, a deck, a screenshot of the thing that drives you crazy &mdash; email it along and it'll get used.</p>
+    <div class="actions">
+      <button type="submit" id="submitBtn">Send my answers</button>
+      <button type="button" class="ghost" id="copyBtn">Save a copy</button>
+      <span class="status" id="status"></span>
+    </div>
+  </div>
+
+</form>
+
+<div class="sheet done-panel" id="donePanel">
+  <div class="closer">
+    <div class="eyebrow"><span class="dot"></span> Received</div>
+    <h2>Got it &mdash; thank you.</h2>
+    <p>Your answers are in. We'll read through them and come back to you with what we'd build first and what it takes to get there.</p>
+    <p>If you remembered something after hitting send, just reply to the email &mdash; no need to fill this out again.</p>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   CONFIG - paste your Apps Script Web App URL between the quotes.
+   See README.md for the two-minute setup.
+------------------------------------------------------------------ */
+var ENDPOINT = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
+var FALLBACK_EMAIL = "you@yourdomain.com";  // used only if the send fails
+/* ---------------------------------------------------------------- */
+
+var form   = document.getElementById('intake');
+var fields = Array.prototype.slice.call(form.querySelectorAll('textarea, input'));
+var qFields = fields.filter(function (f) { return f.tagName === 'TEXTAREA'; });
+var KEY = 'crm-intake-v1';
+
+/* ---- autosize ---- */
+function autosize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, 56) + 'px';
+}
+
+/* ---- restore ---- */
+function restore() {
+  var raw;
+  try { raw = localStorage.getItem(KEY); } catch (e) { return; }
+  if (!raw) return;
+  var data;
+  try { data = JSON.parse(raw); } catch (e) { return; }
+  fields.forEach(function (f) {
+    if (data[f.name]) f.value = data[f.name];
+  });
+}
+
+/* ---- save ---- */
+var saveTimer = null;
+var flag = document.getElementById('savedFlag');
+
+function save() {
+  var data = {};
+  fields.forEach(function (f) { if (f.value.trim()) data[f.name] = f.value; });
+  try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) { return; }
+  flag.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function () { flag.classList.remove('show'); }, 1200);
+}
+
+/* ---- progress ---- */
+var answeredEl = document.getElementById('answered');
+var bar = document.getElementById('bar');
+var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sec-nav a'));
+
+function tally() {
+  var n = qFields.filter(function (f) { return f.value.trim(); }).length;
+  answeredEl.textContent = n;
+  bar.style.width = (n / 41 * 100) + '%';
+  navLinks.forEach(function (a) {
+    var sec = document.getElementById('sec-' + a.dataset.sec);
+    if (!sec) return;
+    var tas = Array.prototype.slice.call(sec.querySelectorAll('textarea'));
+    var filled = tas.filter(function (t) { return t.value.trim(); }).length;
+    a.classList.toggle('done', filled === tas.length && tas.length > 0);
+  });
+}
+
+/* ---- wire up ---- */
+restore();
+qFields.forEach(autosize);
+tally();
+
+fields.forEach(function (f) {
+  f.addEventListener('input', function () {
+    if (f.tagName === 'TEXTAREA') autosize(f);
+    f.classList.remove('missing');
+    save();
+    tally();
+  });
+});
+
+/* ---- plain-text transcript ---- */
+function transcript() {
+  var out = ['BEFORE WE BUILD YOUR CRM \u2014 answers', ''];
+  out.push('Name:    ' + form._name.value);
+  out.push('Company: ' + form._company.value);
+  out.push('Email:   ' + form._email.value);
+  out.push('');
+  document.querySelectorAll('form section').forEach(function (sec) {
+    var t = sec.querySelector('.sec-title');
+    var tas = sec.querySelectorAll('textarea');
+    if (!tas.length) return;
+    out.push('=== ' + t.textContent.toUpperCase() + ' ===', '');
+    tas.forEach(function (ta) {
+      var label = sec.querySelector('label[for="' + ta.name + '"]');
+      out.push(ta.name + '. ' + (label ? label.textContent.trim() : ''));
+      out.push(ta.value.trim() ? ta.value.trim() : '(no answer)');
+      out.push('');
+    });
+  });
+  return out.join('\n');
+}
+
+document.getElementById('copyBtn').addEventListener('click', function () {
+  var blob = new Blob([transcript()], { type: 'text/plain' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'crm-questionnaire-' + (form._company.value.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'answers') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+});
+
+/* ---- submit ---- */
+var status = document.getElementById('status');
+var btn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+
+  var required = [form._name, form._company, form._email];
+  var missing = required.filter(function (f) { return !f.value.trim(); });
+  missing.forEach(function (f) { f.classList.add('missing'); });
+  if (missing.length) {
+    status.textContent = 'Add your name, company, and email at the top first.';
+    status.className = 'status bad';
+    missing[0].focus();
+    missing[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  var payload = { _submittedAt: new Date().toISOString(), _transcript: transcript() };
+  fields.forEach(function (f) { payload[f.name] = f.value.trim(); });
+
+  btn.disabled = true;
+  status.className = 'status';
+  status.textContent = 'Sending\u2026';
+
+  fetch(ENDPOINT, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(payload)
+  })
+    .then(function (r) { return r.text(); })
+    .then(function () {
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      document.body.classList.add('submitted');
+      document.getElementById('donePanel').classList.add('show');
+      window.scrollTo(0, 0);
+    })
+    .catch(function () {
+      btn.disabled = false;
+      status.className = 'status bad';
+      status.innerHTML = 'That didn\'t send. Click <strong>Save a copy</strong> and email the file to ' + FALLBACK_EMAIL + ' \u2014 nothing you typed is lost.';
+    });
+});
+</script>
+
+</body>
+</html>
