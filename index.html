@@ -1032,8 +1032,7 @@ body.submitted .progress { display: none; }
    CONFIG - paste your Apps Script Web App URL between the quotes.
    See README.md for the two-minute setup.
 ------------------------------------------------------------------ */
-var ENDPOINT = "PASTE_YOUR_APPS_SCRIPT_URL_HERE";
-var FALLBACK_EMAIL = "you@yourdomain.com";  // used only if the send fails
+var ENDPOINT = "https://script.google.com/macros/s/AKfycbzeNeSs0bf-UC0C9vym-jyMENgVFsD5tV6tv7pubXslolGZh3LqJ2bBMDJYFZ3vpPFg/exec";
 /* ---------------------------------------------------------------- */
 
 var form   = document.getElementById('intake');
@@ -1183,7 +1182,7 @@ form.addEventListener('submit', function (e) {
     .catch(function () {
       btn.disabled = false;
       status.className = 'status bad';
-      status.innerHTML = 'That didn\'t send. Click <strong>Save a copy</strong> and email the file to ' + FALLBACK_EMAIL + ' \u2014 nothing you typed is lost.';
+      status.innerHTML = 'That didn\'t send. Click <strong>Save a copy</strong> and reply to the email that sent you this link with the file attached \u2014 nothing you typed is lost.';
     });
 });
 </script>
