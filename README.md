@@ -12,6 +12,21 @@ Code.gs      the backend — lives in Google Apps Script, not on the site
 
 ---
 
+## Current deployment
+
+| | |
+|---|---|
+| Live form | https://roach-c.github.io/crm-intake/ |
+| Repo | https://github.com/roach-c/crm-intake (public — required for free Pages) |
+| Backend | Apps Script web app bound to the "CRM Intake" Google Sheet on roachca25@gmail.com |
+| Status | Wired and verified end to end |
+
+`ENDPOINT` in `index.html` is already set. The setup steps below are kept for
+reference — if you ever rebuild this, or stand up a second copy for another
+client, that's the path.
+
+---
+
 ## Why it needs a backend at all
 
 GitHub Pages only serves files. It can't receive a form submission, so the
