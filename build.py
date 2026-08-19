@@ -1,0 +1,898 @@
+import re, html, json, os
+
+SRC_MD   = "questions.md"   # edit this to change the questions, then re-run
+OUT      = "index.html"
+
+TC_CSS = r'''
+/* ==========================================================================
+   TETHERED CREW - client intake sheet
+   Working-drawing / spec-sheet system, locked to the light ("the print")
+   theme. Tokens lifted from the Tethered Crew site so the two read as one
+   piece of stationery.
+   ========================================================================== */
+
+:root {
+  --ink: #15181B;
+  --paper: #EDE8DC;
+  --bg: #E7E9E6;
+  --bg-raised: #F3F4F1;
+  --write: #FBFBFA;
+  --text: #1B1E22;
+  --text-muted: #565C61;
+  --text-faint: #8A9096;
+  --accent: #3A5E82;
+  --accent-strong: #2C4A68;
+  --accent-wash: rgba(58, 94, 130, 0.08);
+  --flag: #8C3547;
+  --border: rgba(27, 30, 34, 0.14);
+  --border-strong: rgba(27, 30, 34, 0.26);
+  --shadow: 0 1px 2px rgba(21, 24, 27, 0.04), 0 12px 32px -16px rgba(21, 24, 27, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.65);
+
+  --radius: 3px;
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --measure: 66ch;
+
+  --f-display: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  --f-body: 'IBM Plex Sans', -apple-system, 'Segoe UI', Helvetica, sans-serif;
+  --f-code: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--f-body);
+  font-size: 17px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* paper grain, same treatment as the site */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image:
+    repeating-linear-gradient(0deg, var(--ink) 0px, transparent 1px, transparent 2px),
+    repeating-linear-gradient(90deg, var(--ink) 0px, transparent 1px, transparent 2px);
+  background-size: 3px 3px;
+}
+
+.sheet {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: clamp(1.5rem, 4vw, 3.5rem) clamp(1rem, 4vw, 3rem) 4rem;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(2rem, 4vw, 3.25rem);
+}
+
+/* ---------- the mark ---------- */
+
+.mark {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.mark-icon { width: 30px; height: 22px; overflow: visible; }
+.mark-icon circle { stroke: var(--text); }
+.mark-icon .ring-accent { stroke: url(#ringGradient); }
+
+.mark-word {
+  font-family: var(--f-display);
+  font-size: 1.18rem;
+  font-weight: 560;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+
+/* ---------- masthead ---------- */
+
+.masthead {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  border-bottom: 1px solid var(--border-strong);
+  padding-bottom: 1.9rem;
+}
+
+.eyebrow {
+  font-family: var(--f-code);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+.eyebrow .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+}
+
+h1 {
+  font-family: var(--f-display);
+  font-weight: 560;
+  font-size: clamp(2.2rem, 5.4vw, 3.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text);
+  text-wrap: balance;
+}
+
+.standfirst {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: 1.05rem;
+  color: var(--text-muted);
+}
+
+.howto {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: 0.4rem;
+}
+
+.howto div { background: var(--bg-raised); padding: 1rem 1.1rem; }
+
+.howto dt {
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: 0.35rem;
+}
+
+.howto dd { margin: 0; font-size: 0.93rem; line-height: 1.5; color: var(--text-muted); }
+
+.star { color: var(--accent); font-weight: 600; }
+
+/* ---------- sections ---------- */
+
+section { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.sec-head {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 0.9rem;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.9rem;
+}
+
+.sec-letter {
+  font-family: var(--f-code);
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: var(--accent);
+  color: var(--bg-raised);
+  padding: 0.34rem 0.66rem;
+  border-radius: var(--radius);
+  line-height: 1;
+}
+
+.sec-title {
+  font-family: var(--f-display);
+  font-weight: 560;
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text);
+}
+
+.sec-note {
+  grid-column: 2;
+  margin: 0.45rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  max-width: var(--measure);
+}
+
+/* ---------- questions ---------- */
+
+.q {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  gap: 0 1rem;
+  break-inside: avoid;
+}
+
+.q-code {
+  font-family: var(--f-code);
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-faint);
+  padding-top: 0.3rem;
+}
+
+.q-body { display: flex; flex-direction: column; gap: 0.5rem; min-width: 0; }
+
+.q-text {
+  margin: 0;
+  font-size: 1.01rem;
+  line-height: 1.5;
+  color: var(--text);
+  max-width: var(--measure);
+  display: block;
+  cursor: pointer;
+}
+
+.q-text .star { margin-right: 0.3rem; }
+
+.q-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-faint);
+  max-width: var(--measure);
+}
+
+.answer,
+textarea.answer {
+  width: 100%;
+  display: block;
+  background: var(--write);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--radius);
+  min-height: 3.6rem;
+  padding: 0.7rem 0.9rem;
+  font-family: var(--f-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text);
+  resize: vertical;
+  overflow: hidden;
+  outline: none;
+  -webkit-appearance: none;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.answer.tall { min-height: 5.4rem; }
+
+textarea.answer::placeholder { color: var(--text-faint); }
+
+.answer:focus {
+  border-left-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+.answer.missing { border-left-color: var(--flag); }
+
+/* ---------- identity block ---------- */
+
+.whois {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 1rem;
+}
+
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+
+.field label {
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.field input {
+  font-family: var(--f-body);
+  font-size: 1rem;
+  padding: 0.62rem 0.8rem;
+  background: var(--write);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--radius);
+  outline: none;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.field input:focus {
+  border-left-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-wash);
+}
+
+.field input.missing { border-left-color: var(--flag); }
+
+/* honeypot */
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+/* ---------- progress rail ---------- */
+
+.progress {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(140%) blur(8px);
+  -webkit-backdrop-filter: saturate(140%) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.progress-inner {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 0.7rem clamp(1rem, 4vw, 3rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.progress-count {
+  font-family: var(--f-code);
+  font-size: 0.73rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-track {
+  flex: 1 1 8rem;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  min-width: 6rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-strong) 100%);
+  transition: width 0.3s var(--ease);
+}
+
+.sec-nav { display: flex; gap: 0.1rem; }
+
+.sec-nav a {
+  font-family: var(--f-code);
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text-faint);
+  text-decoration: none;
+  padding: 0.24rem 0.44rem;
+  border-radius: var(--radius);
+  transition: color 0.2s var(--ease), background 0.2s var(--ease);
+}
+
+.sec-nav a:hover { color: var(--accent); background: var(--accent-wash); }
+.sec-nav a.done { color: var(--accent); }
+
+.saved-flag {
+  font-family: var(--f-code);
+  font-size: 0.67rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
+  white-space: nowrap;
+}
+
+.saved-flag.show { opacity: 1; }
+
+/* ---------- closer + actions ---------- */
+
+.closer {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: clamp(1.4rem, 3vw, 2.2rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.closer h2 {
+  font-family: var(--f-display);
+  font-weight: 560;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text);
+}
+
+.closer p { margin: 0; max-width: var(--measure); color: var(--text-muted); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  margin-top: 0.6rem;
+}
+
+button {
+  font-family: var(--f-body);
+  font-weight: 500;
+  font-size: 0.95rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  background: linear-gradient(160deg, #7C97B2 0%, var(--accent) 45%, var(--accent-strong) 100%);
+  color: var(--bg-raised);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.4), inset 0 -2px 3px rgba(0,0,0,0.15), 0 1px 2px rgba(0,0,0,0.15);
+  transition: transform 0.2s var(--ease), filter 0.2s var(--ease);
+}
+
+button:hover { transform: translateY(-1px); filter: brightness(1.06); }
+button:active { transform: translateY(0); }
+
+button.ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border-color: var(--border-strong);
+  box-shadow: none;
+}
+
+button.ghost:hover { color: var(--accent); border-color: var(--accent); filter: none; }
+
+button[disabled] { opacity: 0.55; cursor: progress; transform: none; }
+
+.status { font-size: 0.9rem; color: var(--text-muted); }
+.status.bad { color: var(--flag); }
+
+/* ---------- done ---------- */
+
+.done-panel { display: none; }
+.done-panel.show { display: flex; flex-direction: column; gap: 1rem; }
+body.submitted #intake { display: none; }
+body.submitted .progress { display: none; }
+
+/* ---------- footer ---------- */
+
+.site-foot {
+  max-width: 54rem;
+  margin: 0 auto;
+  padding: 1.6rem clamp(1rem, 4vw, 3rem) 3rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.site-foot .mark-icon circle { stroke: var(--text-muted); }
+.site-foot .mark-word { color: var(--text-muted); font-size: 1rem; }
+
+.foot-fine {
+  margin: 0;
+  font-family: var(--f-code);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+@media (max-width: 34rem) {
+  .q { grid-template-columns: 1fr; gap: 0.35rem; }
+  .q-code { padding-top: 0; }
+  .sec-note { grid-column: 1 / -1; }
+}
+
+@media print {
+  body { background: #fff; font-size: 11pt; }
+  .grain, .progress, .actions, .saved-flag, .sec-nav { display: none; }
+  .sheet { padding: 0; gap: 1.6rem; max-width: none; }
+  .closer { box-shadow: none; }
+  textarea.answer { overflow: visible; background: #fff; }
+  .sec-head { break-after: avoid; }
+}
+'''
+
+base_css = TC_CSS
+
+# ---- parse the questionnaire source ----
+sections, cur = [], None
+for ln in open(SRC_MD).read().splitlines():
+    m = re.match(r'^## ([A-G])\. (.+)$', ln)
+    if m:
+        cur = {"letter": m.group(1), "title": m.group(2), "note": "", "qs": []}
+        sections.append(cur); continue
+    if ln.startswith("## Last one"):
+        cur = {"letter": "H", "title": "One last one", "note": "", "qs": []}
+        sections.append(cur); continue
+    q = re.match(r'^([A-G]\d+) (★ )?(.+)$', ln)
+    if q and cur:
+        code, star, text = q.group(1), bool(q.group(2)), q.group(3).strip()
+        hint = ""
+        hm = re.match(r'^(.*?) \(([^()]*)\)$', text)
+        if hm and len(hm.group(2)) > 25:
+            text, hint = hm.group(1).strip(), hm.group(2).strip()
+        cur["qs"].append({"code": code, "star": star, "text": text, "hint": hint}); continue
+    if cur and cur["letter"] == "H" and ln.strip() and not ln.startswith("Completed by"):
+        cur["qs"].append({"code": "H1", "star": True, "text": ln.strip(), "hint": ""})
+
+# section notes lifted from the printed sheet
+NOTES = {
+ "A": "The shape of the company. This decides what the system is even counting.",
+ "B": "Logins and what each person is allowed to see. Easier to decide now than to unwind later.",
+ "C": "Every field you name here becomes something you can sort, filter, and report on. Every one you forget becomes a note nobody reads.",
+ "D": "Your pipeline, in your own vocabulary. We'll build the stages to match what you say here, not the other way around.",
+ "E": "Commission math is the part that's different at every firm, and the part that's most painful to bolt on afterward.",
+ "F": "What the system should chase you about, and what it should hand you at the end of the month.",
+ "G": "What this has to live alongside, what has to come across from the old way, and what the real constraints are.",
+ "H": "",
+}
+for s in sections:
+    s["note"] = NOTES.get(s["letter"], "")
+
+TITLES = {"A":"The business","B":"Who's in it","C":"What you keep track of","D":"How a deal moves",
+          "E":"Money","F":"Reminders and reporting","G":"Systems and ground rules","H":"One last one"}
+for s in sections:
+    s["title"] = TITLES.get(s["letter"], s["title"])
+
+total_q = sum(len(s["qs"]) for s in sections)
+
+# ---- markup ----
+def esc(t): return html.escape(t, quote=True)
+
+nav = "\n".join(
+    f'      <a href="#sec-{s["letter"]}" data-sec="{s["letter"]}">{s["letter"]}</a>'
+    for s in sections)
+
+blocks = []
+for s in sections:
+    qs = []
+    for q in s["qs"]:
+        star = '<span class="star" title="Answer this one if you answer nothing else">&#9733;</span>' if q["star"] else ""
+        hint = f'\n        <p class="q-hint">{esc(q["hint"])}</p>' if q["hint"] else ""
+        tall = " tall" if q["hint"] or len(q["text"]) > 130 else ""
+        qs.append(f"""    <div class="q">
+      <div class="q-code">{q["code"]}</div>
+      <div class="q-body">
+        <label class="q-text" for="{q["code"]}">{star}{esc(q["text"])}</label>{hint}
+        <textarea class="answer{tall}" id="{q["code"]}" name="{q["code"]}" rows="2"
+          data-star="{str(q["star"]).lower()}" placeholder="Type your answer&#8230;"></textarea>
+      </div>
+    </div>""")
+    note = f'\n      <p class="sec-note">{esc(s["note"])}</p>' if s["note"] else ""
+    blocks.append(f"""  <section id="sec-{s['letter']}">
+    <div class="sec-head">
+      <div class="sec-letter">{s['letter']}</div>
+      <h2 class="sec-title">{esc(s['title'])}</h2>{note}
+    </div>
+
+{chr(10).join(qs)}
+  </section>""")
+
+extra_css = ""
+
+doc = f"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Before We Build Your CRM</title>
+<meta name="description" content="A short discovery questionnaire so your CRM gets built around how you actually work.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+{base_css}
+{extra_css}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="ringGradient" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#B0BECD"/>
+      <stop offset="50%" stop-color="#3A5E82"/>
+      <stop offset="100%" stop-color="#2C4A68"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="progress">
+  <div class="progress-inner">
+    <span class="progress-count"><span id="answered">0</span> / {total_q} answered</span>
+    <span class="progress-track"><span class="progress-fill" id="bar"></span></span>
+    <nav class="sec-nav" aria-label="Jump to section">
+{nav}
+    </nav>
+    <span class="saved-flag" id="savedFlag">Saved</span>
+  </div>
+</div>
+
+<form class="sheet" id="intake" novalidate>
+
+  <header class="masthead">
+    <div class="mark">
+      <svg class="mark-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+        <circle cx="12" cy="16" r="8.5" fill="none" stroke-width="2.25"/>
+        <circle cx="20" cy="16" r="8.5" fill="none" stroke-width="2.25" class="ring-accent"/>
+      </svg>
+      <span class="mark-word">Tethered&nbsp;Crew</span>
+    </div>
+    <div class="eyebrow"><span class="dot"></span> Discovery questionnaire &nbsp;&#183;&nbsp; CRM build</div>
+    <h1>Before we build your CRM</h1>
+    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your commission math, your line-review calendar &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
+    <dl class="howto">
+      <div>
+        <dt>Who fills this out</dt>
+        <dd>Whoever runs the day-to-day. Pull in a rep for Sections C and D if they know the workflow better.</dd>
+      </div>
+      <div>
+        <dt>Short on time</dt>
+        <dd>Answer the <span class="star">&#9733;</span> questions first &mdash; that's about fifteen minutes and enough to start.</dd>
+      </div>
+      <div>
+        <dt>You can stop anytime</dt>
+        <dd>Your answers save in this browser as you type. Close the tab, come back later, pick up where you left off.</dd>
+      </div>
+    </dl>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <div class="sec-letter">&#8212;</div>
+      <h2 class="sec-title">First, who are you</h2>
+    </div>
+    <div class="whois">
+      <div class="field">
+        <label for="_name">Your name</label>
+        <input type="text" id="_name" name="_name" autocomplete="name" required>
+      </div>
+      <div class="field">
+        <label for="_company">Company</label>
+        <input type="text" id="_company" name="_company" autocomplete="organization" required>
+      </div>
+      <div class="field">
+        <label for="_email">Email</label>
+        <input type="email" id="_email" name="_email" autocomplete="email" required>
+      </div>
+    </div>
+    <div class="hp" aria-hidden="true">
+      <label for="_website">Leave this field empty</label>
+      <input type="text" id="_website" name="_website" tabindex="-1" autocomplete="off">
+    </div>
+  </section>
+
+{chr(10).join(blocks)}
+
+  <div class="closer">
+    <h2>That's everything</h2>
+    <p>Send it over and we'll read it before we talk. If something didn't fit in a box &mdash; a spreadsheet, a deck, a screenshot of the thing that drives you crazy &mdash; email it along and it'll get used.</p>
+    <div class="actions">
+      <button type="submit" id="submitBtn">Send my answers</button>
+      <button type="button" class="ghost" id="copyBtn">Save a copy</button>
+      <span class="status" id="status"></span>
+    </div>
+  </div>
+
+</form>
+
+<div class="sheet done-panel" id="donePanel">
+  <div class="closer">
+    <div class="eyebrow"><span class="dot"></span> Received</div>
+    <h2>Got it &mdash; thank you.</h2>
+    <p>Your answers are in. We'll read through them and come back to you with what we'd build first and what it takes to get there.</p>
+    <p>If you remembered something after hitting send, just reply to the email &mdash; no need to fill this out again.</p>
+  </div>
+</div>
+
+<script>
+/* ------------------------------------------------------------------
+   CONFIG - paste your Apps Script Web App URL between the quotes.
+   See README.md for the two-minute setup.
+------------------------------------------------------------------ */
+var ENDPOINT = "https://script.google.com/macros/s/AKfycbzeNeSs0bf-UC0C9vym-jyMENgVFsD5tV6tv7pubXslolGZh3LqJ2bBMDJYFZ3vpPFg/exec";
+/* ---------------------------------------------------------------- */
+
+var form   = document.getElementById('intake');
+var fields = Array.prototype.slice.call(form.querySelectorAll('textarea, input'));
+fields = fields.filter(function (f) {{ return f.name !== '_website'; }});
+var qFields = fields.filter(function (f) {{ return f.tagName === 'TEXTAREA'; }});
+var KEY = 'crm-intake-v1';
+
+/* ---- autosize ---- */
+function autosize(el) {{
+  el.style.height = 'auto';
+  el.style.height = Math.max(el.scrollHeight, 56) + 'px';
+}}
+
+/* ---- restore ---- */
+function restore() {{
+  var raw;
+  try {{ raw = localStorage.getItem(KEY); }} catch (e) {{ return; }}
+  if (!raw) return;
+  var data;
+  try {{ data = JSON.parse(raw); }} catch (e) {{ return; }}
+  fields.forEach(function (f) {{
+    if (data[f.name]) f.value = data[f.name];
+  }});
+}}
+
+/* ---- save ---- */
+var saveTimer = null;
+var flag = document.getElementById('savedFlag');
+
+function save() {{
+  var data = {{}};
+  fields.forEach(function (f) {{ if (f.value.trim()) data[f.name] = f.value; }});
+  try {{ localStorage.setItem(KEY, JSON.stringify(data)); }} catch (e) {{ return; }}
+  flag.classList.add('show');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function () {{ flag.classList.remove('show'); }}, 1200);
+}}
+
+/* ---- progress ---- */
+var answeredEl = document.getElementById('answered');
+var bar = document.getElementById('bar');
+var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sec-nav a'));
+
+function tally() {{
+  var n = qFields.filter(function (f) {{ return f.value.trim(); }}).length;
+  answeredEl.textContent = n;
+  bar.style.width = (n / {total_q} * 100) + '%';
+  navLinks.forEach(function (a) {{
+    var sec = document.getElementById('sec-' + a.dataset.sec);
+    if (!sec) return;
+    var tas = Array.prototype.slice.call(sec.querySelectorAll('textarea'));
+    var filled = tas.filter(function (t) {{ return t.value.trim(); }}).length;
+    a.classList.toggle('done', filled === tas.length && tas.length > 0);
+  }});
+}}
+
+/* ---- wire up ---- */
+restore();
+qFields.forEach(autosize);
+tally();
+
+fields.forEach(function (f) {{
+  f.addEventListener('input', function () {{
+    if (f.tagName === 'TEXTAREA') autosize(f);
+    f.classList.remove('missing');
+    save();
+    tally();
+  }});
+}});
+
+/* ---- plain-text transcript ---- */
+function transcript() {{
+  var out = ['BEFORE WE BUILD YOUR CRM \\u2014 answers', ''];
+  out.push('Name:    ' + form._name.value);
+  out.push('Company: ' + form._company.value);
+  out.push('Email:   ' + form._email.value);
+  out.push('');
+  document.querySelectorAll('form section').forEach(function (sec) {{
+    var t = sec.querySelector('.sec-title');
+    var tas = sec.querySelectorAll('textarea');
+    if (!tas.length) return;
+    out.push('=== ' + t.textContent.toUpperCase() + ' ===', '');
+    tas.forEach(function (ta) {{
+      var label = sec.querySelector('label[for="' + ta.name + '"]');
+      out.push(ta.name + '. ' + (label ? label.textContent.trim() : ''));
+      out.push(ta.value.trim() ? ta.value.trim() : '(no answer)');
+      out.push('');
+    }});
+  }});
+  return out.join('\\n');
+}}
+
+document.getElementById('copyBtn').addEventListener('click', function () {{
+  var blob = new Blob([transcript()], {{ type: 'text/plain' }});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'crm-questionnaire-' + (form._company.value.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'answers') + '.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}});
+
+/* ---- submit ---- */
+var status = document.getElementById('status');
+var btn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', function (e) {{
+  e.preventDefault();
+
+  var required = [form._name, form._company, form._email];
+  var missing = required.filter(function (f) {{ return !f.value.trim(); }});
+  missing.forEach(function (f) {{ f.classList.add('missing'); }});
+  if (missing.length) {{
+    status.textContent = 'Add your name, company, and email at the top first.';
+    status.className = 'status bad';
+    missing[0].focus();
+    missing[0].scrollIntoView({{ behavior: 'smooth', block: 'center' }});
+    return;
+  }}
+
+  if (form._website.value) {{           // honeypot: only a bot fills this
+    document.body.classList.add('submitted');
+    document.getElementById('donePanel').classList.add('show');
+    return;
+  }}
+
+  var payload = {{ _submittedAt: new Date().toISOString(), _transcript: transcript() }};
+  fields.forEach(function (f) {{ payload[f.name] = f.value.trim(); }});
+
+  btn.disabled = true;
+  status.className = 'status';
+  status.textContent = 'Sending\\u2026';
+
+  fetch(ENDPOINT, {{
+    method: 'POST',
+    headers: {{ 'Content-Type': 'text/plain;charset=utf-8' }},
+    body: JSON.stringify(payload)
+  }})
+    .then(function (r) {{ return r.text(); }})
+    .then(function () {{
+      try {{ localStorage.removeItem(KEY); }} catch (e) {{}}
+      document.body.classList.add('submitted');
+      document.getElementById('donePanel').classList.add('show');
+      window.scrollTo(0, 0);
+    }})
+    .catch(function () {{
+      btn.disabled = false;
+      status.className = 'status bad';
+      status.innerHTML = 'That didn\\'t send. Click <strong>Save a copy</strong> and reply to the email that sent you this link with the file attached \\u2014 nothing you typed is lost.';
+    }});
+}});
+</script>
+
+<footer class="site-foot">
+  <div class="mark">
+    <svg class="mark-icon" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+      <circle cx="12" cy="16" r="8.5" fill="none" stroke-width="2.25"/>
+      <circle cx="20" cy="16" r="8.5" fill="none" stroke-width="2.25" class="ring-accent"/>
+    </svg>
+    <span class="mark-word">Tethered&nbsp;Crew</span>
+  </div>
+  <p class="foot-fine">Websites, CRMs, and operations built as one system.</p>
+</footer>
+
+</body>
+</html>
+"""
+
+if os.path.dirname(OUT):
+    os.makedirs(os.path.dirname(OUT), exist_ok=True)
+open(OUT, "w").write(doc)
+print("wrote", OUT, "|", total_q, "questions,", len(sections), "sections")

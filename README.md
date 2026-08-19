@@ -118,3 +118,16 @@ This catches everybody once.
 a question, keep the `id`/`name` on the textarea matching its code (`D8`, etc.)
 and add that same code to the `CODES` and `LABELS` lists in `Code.gs` so the
 column lines up.
+
+---
+
+## Changing the questions
+
+`index.html` is generated. Don't hand-edit it — edit the source and rebuild:
+
+1. Edit `questions.md` (the questions, in plain markdown; `★` marks a priority one)
+2. Run `python3 build.py`
+3. Commit and push `index.html`
+
+`build.py` also holds the stylesheet and the page markup, so design changes go
+there too. Re-running it reproduces `index.html` byte for byte.
