@@ -779,16 +779,17 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">A1</div>
       <div class="q-body">
-        <label class="q-text" for="A1">In one or two sentences: what does your company do?</label>
-        <textarea class="answer" id="A1" name="A1" rows="2"
+        <label class="q-text" for="A1">What does your company do?</label>
+        <p class="q-hint">One or two sentences is plenty.</p>
+        <textarea class="answer tall" id="A1" name="A1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">A2</div>
       <div class="q-body">
-        <label class="q-text" for="A2">How do you get paid — commission on shipped sales, monthly retainer, project fee, or a mix?</label>
-        <p class="q-hint">No numbers needed here. It decides whether the system needs commission math at all, which is the single biggest fork in what we build.</p>
+        <label class="q-text" for="A2">How do you get paid?</label>
+        <p class="q-hint">Commission on shipped sales, retainer, project fee, or a mix. No numbers needed — we only need to know whether the system has to do commission math.</p>
         <textarea class="answer tall" id="A2" name="A2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -796,8 +797,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">A3</div>
       <div class="q-body">
-        <label class="q-text" for="A3">Which retailers and distributors do you sell into, and roughly how many brands do you represent right now?</label>
-        <p class="q-hint">Walmart, Sam&#x27;s, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane…</p>
+        <label class="q-text" for="A3">Which retailers do you sell into, and how many brands do you represent?</label>
+        <p class="q-hint">Walmart, Sam&#x27;s, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane… a rough count is fine.</p>
         <textarea class="answer tall" id="A3" name="A3" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -813,16 +814,18 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">B1</div>
       <div class="q-body">
-        <label class="q-text" for="B1">Who would log in, and what is each person&#x27;s role?</label>
-        <textarea class="answer" id="B1" name="B1" rows="2"
+        <label class="q-text" for="B1">Who would log in?</label>
+        <p class="q-hint">Names and roles. Mark whoever should be the admin.</p>
+        <textarea class="answer tall" id="B1" name="B1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">B2</div>
       <div class="q-body">
-        <label class="q-text" for="B2">Should anyone see only their own accounts, or be kept away from money — commissions, margins, what others earn?</label>
-        <textarea class="answer" id="B2" name="B2" rows="2"
+        <label class="q-text" for="B2">Should anyone be kept from seeing money, or from seeing other people&#x27;s accounts?</label>
+        <p class="q-hint">Commissions, margins, what others earn. If everyone sees everything, just say so.</p>
+        <textarea class="answer tall" id="B2" name="B2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
@@ -837,8 +840,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">C1</div>
       <div class="q-body">
-        <label class="q-text" for="C1">Attach the spreadsheets and documents you run the business on today. If you&#x27;d rather not send them, describe what&#x27;s in each.</label>
-        <p class="q-hint">This one is worth more than the rest of the form put together — it shows us how you already work instead of how you&#x27;d describe it.</p>
+        <label class="q-text" for="C1">Attach the spreadsheets and documents you run the business on today.</label>
+        <p class="q-hint">Worth more than the rest of this form put together. If you&#x27;d rather not send files, list what they are and what&#x27;s in them.</p>
         <textarea class="answer tall" id="C1" name="C1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
         <div class="attach" id="attach">
@@ -867,24 +870,27 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">C2</div>
       <div class="q-body">
-        <label class="q-text" for="C2">Walk us through a deal, from first conversation to product on the shelf. What do you call each stage?</label>
-        <textarea class="answer" id="C2" name="C2" rows="2"
+        <label class="q-text" for="C2">List the stages a deal goes through, first conversation to product on the shelf.</label>
+        <p class="q-hint">Your names for them, not ours. A list is fine — no sentences needed.</p>
+        <textarea class="answer tall" id="C2" name="C2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">C3</div>
       <div class="q-body">
-        <label class="q-text" for="C3">How do line reviews and modular resets drive your calendar, and how far ahead do you start?</label>
-        <textarea class="answer" id="C3" name="C3" rows="2"
+        <label class="q-text" for="C3">When are your line reviews, and how far ahead do you start working them?</label>
+        <p class="q-hint">Name the resets or review windows that set your calendar.</p>
+        <textarea class="answer tall" id="C3" name="C3" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">C4</div>
       <div class="q-body">
-        <label class="q-text" for="C4">What falls through the cracks most often? Tell us about the last one that cost you.</label>
-        <textarea class="answer" id="C4" name="C4" rows="2"
+        <label class="q-text" for="C4">What falls through the cracks most often?</label>
+        <p class="q-hint">One example is enough — ideally the last one that cost you.</p>
+        <textarea class="answer tall" id="C4" name="C4" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
@@ -899,8 +905,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">D1</div>
       <div class="q-body">
-        <label class="q-text" for="D1">How is commission calculated, and when do you actually get paid?</label>
-        <p class="q-hint">Ballpark is fine for now — we&#x27;ll get exact before we build. We&#x27;re after the shape of the rule: % of shipped invoice, per unit, tiered, different per client or retailer, and any exception you&#x27;d have to remember.</p>
+        <label class="q-text" for="D1">How is commission calculated, and when do you get paid?</label>
+        <p class="q-hint">Ballpark is fine for now. Percent of shipped invoice, per unit, tiered, different by client or retailer — plus any exception you&#x27;d have to remember.</p>
         <textarea class="answer tall" id="D1" name="D1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -908,7 +914,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">D2</div>
       <div class="q-body">
-        <label class="q-text" for="D2">What number do you most want to see the second you log in?</label>
+        <label class="q-text" for="D2">What one number do you want to see when you log in?</label>
         <textarea class="answer" id="D2" name="D2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -924,8 +930,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">E1</div>
       <div class="q-body">
-        <label class="q-text" for="E1">What software do you use today, and which of it is untouchable?</label>
-        <p class="q-hint">Retail Link, Luminate, NIQ/Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers</p>
+        <label class="q-text" for="E1">What software do you use today, and which of it can&#x27;t change?</label>
+        <p class="q-hint">Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.</p>
         <textarea class="answer tall" id="E1" name="E1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -933,23 +939,25 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">E2</div>
       <div class="q-body">
-        <label class="q-text" for="E2">Have you tried a CRM before? Which one, and what specifically made you stop using it?</label>
-        <textarea class="answer" id="E2" name="E2" rows="2"
+        <label class="q-text" for="E2">Have you used a CRM before?</label>
+        <p class="q-hint">Which one, and what made you stop.</p>
+        <textarea class="answer tall" id="E2" name="E2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">E3</div>
       <div class="q-body">
-        <label class="q-text" for="E3">When do you need this live, and is there a date that actually matters — a line review, a trade show, the fiscal year?</label>
-        <textarea class="answer" id="E3" name="E3" rows="2"
+        <label class="q-text" for="E3">When do you need this live?</label>
+        <p class="q-hint">Is there a hard date — a line review, a trade show, year end?</p>
+        <textarea class="answer tall" id="E3" name="E3" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">E4</div>
       <div class="q-body">
-        <label class="q-text" for="E4">If the first version only did three things, and did them perfectly, which three?</label>
+        <label class="q-text" for="E4">If version one only did three things, which three?</label>
         <textarea class="answer" id="E4" name="E4" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -972,15 +980,17 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">W1</div>
       <div class="q-body">
-        <label class="q-text" for="W1">Do you already own a domain, and who has the login for it? Is anything live there today?</label>
-        <textarea class="answer" id="W1" name="W1" rows="2"
+        <label class="q-text" for="W1">Do you already own a domain?</label>
+        <p class="q-hint">Who has the login, and is anything live there now?</p>
+        <textarea class="answer tall" id="W1" name="W1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
       <div class="q-code">W2</div>
       <div class="q-body">
-        <label class="q-text" for="W2">If a visitor does exactly one thing on the site, what should it be — call you, fill out a form, download a line sheet, book a meeting?</label>
+        <label class="q-text" for="W2">What should a visitor do on the site?</label>
+        <p class="q-hint">Pick one: call you, fill out a form, download a line sheet, book a meeting.</p>
         <textarea class="answer tall" id="W2" name="W2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -988,8 +998,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">W3</div>
       <div class="q-body">
-        <label class="q-text" for="W3">Should leads from the site&#x27;s contact form land straight in the CRM as a new record, and who gets pinged when one comes in?</label>
-        <textarea class="answer" id="W3" name="W3" rows="2"
+        <label class="q-text" for="W3">Should website leads land in the CRM automatically?</label>
+        <p class="q-hint">And who gets the notification?</p>
+        <textarea class="answer tall" id="W3" name="W3" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
