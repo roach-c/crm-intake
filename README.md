@@ -101,6 +101,9 @@ This catches everybody once.
 - Progress bar and section jump links at the top
 - Answers autosave to their browser as they type — they can close the tab and
   come back; nothing is lost
+- A file uploader under C1 — drag-and-drop, up to 8 files at 10 MB each. Each
+  file uploads on its own request the moment it's picked, so a big spreadsheet
+  can't take the answers down with it, and the links survive a closed tab
 - A **Save a copy** button that downloads their answers as a text file
 - Sections A–E, then W. Section W is optional and collapsed by default: it only opens if they tick
   "a website is part of this", and it never counts against the progress bar
@@ -109,7 +112,9 @@ This catches everybody once.
 ## What you get
 
 - One row per submission on the Sheet, one column per question code, plus a
-  `Website?` column saying whether they opted into section W
+  `Website?` column and a `Files` column of Drive links
+- Attachments in your own Drive under **Client questionnaire uploads / <Company>**,
+  shared with nobody — change `UPLOAD_FOLDER` in `Code.gs` to move them
 - An email with only the answered questions, formatted to actually read,
   with reply-to set to the person who filled it out
 
@@ -125,6 +130,10 @@ This catches everybody once.
    that the set is short enough that every question is a priority.
 2. Run `python3 build.py`
 3. Commit and push `index.html`
+
+`ATTACH_TO` at the top of `build.py` decides which question carries the file
+uploader (`C1`), alongside `MAX_FILE_MB` and `MAX_FILES`. The backend enforces
+its own ceiling in `MAX_UPLOAD_BYTES` — raise both or neither.
 
 `build.py` also holds the stylesheet and the page markup, so design changes go
 there too. Re-running it reproduces `index.html` byte for byte.

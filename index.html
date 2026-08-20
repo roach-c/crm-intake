@@ -595,6 +595,89 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
 .opt-body { display: flex; flex-direction: column; gap: 1.5rem; }
 .opt-body[hidden] { display: none; }
 
+/* ---------- file attachments ---------- */
+
+.attach { display: flex; flex-direction: column; gap: 0.6rem; max-width: var(--measure); }
+.attach input[type="file"] { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.attach-drop {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.85rem 1rem;
+  background: var(--bg-raised);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+}
+
+.attach-drop:hover,
+.attach-drop:focus-visible,
+.attach-drop.over { border-color: var(--accent); background: var(--accent-wash); }
+.attach-drop.over { border-style: solid; }
+
+.attach-icon { flex: none; width: 1.35rem; height: 1.35rem; stroke: var(--accent); }
+.attach-copy { display: flex; flex-direction: column; gap: 0.15rem; min-width: 0; }
+.attach-copy strong { font-size: 0.95rem; font-weight: 560; color: var(--text); }
+
+.attach-fine {
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.attach-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0.35rem; }
+
+.attach-list li {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.5rem 0.7rem;
+  background: var(--write);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border-strong);
+  border-radius: var(--radius);
+  font-size: 0.88rem;
+}
+
+.attach-list li.done { border-left-color: var(--accent); }
+.attach-list li.failed { border-left-color: var(--flag); }
+
+.file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); }
+
+.file-state {
+  font-family: var(--f-code);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  white-space: nowrap;
+}
+
+.attach-list li.done .file-state { color: var(--accent); }
+.attach-list li.failed .file-state { color: var(--flag); }
+
+.file-drop {
+  border: 0;
+  background: none;
+  padding: 0 0.2rem;
+  font: inherit;
+  font-size: 1.05rem;
+  line-height: 1;
+  color: var(--text-faint);
+  cursor: pointer;
+}
+
+.file-drop:hover { color: var(--flag); }
+
+.attach-note { margin: 0; font-size: 0.82rem; line-height: 1.45; color: var(--text-faint); }
+.attach-note.bad { color: var(--flag); }
+
+@media print { .attach-drop, .attach-note { display: none; } }
+
 .sec-nav a.opt { color: var(--text-faint); }
 .sec-nav a.opt.done { color: var(--accent); }
 
@@ -754,10 +837,31 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">C1</div>
       <div class="q-body">
-        <label class="q-text" for="C1">Send us the spreadsheets and documents you run the business on today. If you can&#x27;t send them, describe what&#x27;s in each.</label>
+        <label class="q-text" for="C1">Attach the spreadsheets and documents you run the business on today. If you&#x27;d rather not send them, describe what&#x27;s in each.</label>
         <p class="q-hint">This one is worth more than the rest of the form put together — it shows us how you already work instead of how you&#x27;d describe it.</p>
         <textarea class="answer tall" id="C1" name="C1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
+        <div class="attach" id="attach">
+          <input type="file" id="fileInput" multiple
+            accept=".xlsx,.xls,.csv,.numbers,.pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg,.heic,.txt,.zip">
+          <div class="attach-drop" id="drop" tabindex="0" role="button"
+            aria-label="Attach files, or drag them here">
+            <svg class="attach-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" fill="none" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"
+                fill="none" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span class="attach-copy">
+              <strong>Attach the files</strong>
+              <span class="attach-fine">Drag them here, or click to choose &#183;
+                spreadsheets, PDFs, decks, screenshots &#183; up to 10&#8239;MB each</span>
+            </span>
+          </div>
+          <ul class="attach-list" id="fileList"></ul>
+          <p class="attach-note" id="attachNote">Nothing here is shared with anyone. If a file
+            is too big or won&#8217;t upload, answer in the box above and email it instead.</p>
+        </div>
       </div>
     </div>
     <div class="q">
@@ -894,7 +998,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
 
   <div class="closer">
     <h2>That's everything</h2>
-    <p>Send it over and we'll read it before we talk. If something didn't fit in a box &mdash; a spreadsheet, a deck, a screenshot of the thing that drives you crazy &mdash; email it along and it'll get used.</p>
+    <p>Send it over and we'll read it before we talk. If something didn't fit in a box &mdash; a report, a deck, a screenshot of the thing that drives you crazy &mdash; attach it up at C1 or email it along, and it'll get used.</p>
     <div class="actions">
       <button type="submit" id="submitBtn">Send my answers</button>
       <button type="button" class="ghost" id="copyBtn">Save a copy</button>
@@ -959,6 +1063,9 @@ function save() {
   var data = {};
   fields.forEach(function (f) { if (f.value.trim()) data[f.name] = f.value; });
   if (wantSite && wantSite.checked) data.__wantSite = true;
+  if (typeof uploads !== 'undefined' && uploads.length) {
+    data.__files = uploads.filter(function (u) { return u.state === 'done'; });
+  }
   try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) { return; }
   flag.classList.add('show');
   clearTimeout(saveTimer);
@@ -1019,12 +1126,170 @@ fields.forEach(function (f) {
   });
 });
 
+/* ---- attachments ----------------------------------------------
+   Each file is uploaded on its own request as soon as it's picked, so
+   a big spreadsheet can't take the answers down with it. What travels
+   with the answers is just a list of Drive links.
+------------------------------------------------------------------ */
+var MAX_BYTES = 10 * 1024 * 1024;
+var MAX_FILES = 8;
+var uploads = [];                       /* { name, size, url, state } */
+(function restoreFiles() {
+  var raw;
+  try { raw = localStorage.getItem(KEY); } catch (e) { return; }
+  if (!raw) return;
+  try { uploads = (JSON.parse(raw).__files || []).slice(0, 8); } catch (e) {}
+})();
+
+var drop      = document.getElementById('drop');
+var fileInput = document.getElementById('fileInput');
+var fileList  = document.getElementById('fileList');
+var attachNote = document.getElementById('attachNote');
+var NOTE_DEFAULT = attachNote ? attachNote.innerHTML : '';
+
+function human(bytes) {
+  if (bytes < 1024) return bytes + ' B';
+  if (bytes < 1024 * 1024) return Math.round(bytes / 1024) + ' KB';
+  return (bytes / 1024 / 1024).toFixed(1) + ' MB';
+}
+
+function noteBad(msg) {
+  if (!attachNote) return;
+  attachNote.textContent = msg;
+  attachNote.className = 'attach-note bad';
+}
+
+function noteReset() {
+  if (!attachNote) return;
+  attachNote.innerHTML = NOTE_DEFAULT;
+  attachNote.className = 'attach-note';
+}
+
+var STATE_WORDS = { uploading: 'Sending', done: 'Attached', failed: 'Failed' };
+
+function renderFiles() {
+  if (!fileList) return;
+  fileList.innerHTML = '';
+  uploads.forEach(function (u, i) {
+    var li = document.createElement('li');
+    li.className = u.state;
+
+    var name = document.createElement('span');
+    name.className = 'file-name';
+    name.textContent = u.name + '  ·  ' + human(u.size);
+
+    var state = document.createElement('span');
+    state.className = 'file-state';
+    state.textContent = STATE_WORDS[u.state] || u.state;
+
+    var x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'file-drop';
+    x.setAttribute('aria-label', 'Remove ' + u.name);
+    x.textContent = '×';
+    x.addEventListener('click', function () {
+      uploads.splice(i, 1);
+      renderFiles();
+      save();
+    });
+
+    li.appendChild(name); li.appendChild(state); li.appendChild(x);
+    fileList.appendChild(li);
+  });
+}
+
+function uploadFile(file) {
+  var entry = { name: file.name, size: file.size, url: '', state: 'uploading' };
+  uploads.push(entry);
+  renderFiles();
+
+  var reader = new FileReader();
+  reader.onerror = function () {
+    entry.state = 'failed';
+    renderFiles();
+    noteBad('Couldn’t read ' + file.name + '. Email that one instead.');
+  };
+  reader.onload = function () {
+    var b64 = String(reader.result).split(',')[1] || '';
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        _kind: 'file',
+        _company: form._company.value,
+        _name: form._name.value,
+        filename: file.name,
+        mimeType: file.type || 'application/octet-stream',
+        data: b64
+      })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (res) {
+        if (!res || !res.ok || !res.url) throw new Error('rejected');
+        entry.url = res.url;
+        entry.state = 'done';
+        renderFiles();
+        save();
+      })
+      .catch(function () {
+        entry.state = 'failed';
+        renderFiles();
+        noteBad(file.name + ' didn’t upload. Send that one by email — everything else is fine.');
+      });
+  };
+  reader.readAsDataURL(file);
+}
+
+function addFiles(list) {
+  noteReset();
+  Array.prototype.slice.call(list).forEach(function (file) {
+    if (uploads.length >= MAX_FILES) {
+      noteBad('That’s ' + MAX_FILES + ' files — the limit. Email any others along.');
+      return;
+    }
+    if (file.size > MAX_BYTES) {
+      noteBad(file.name + ' is ' + human(file.size) + '. The limit here is 10 MB — email that one instead.');
+      return;
+    }
+    uploadFile(file);
+  });
+}
+
+renderFiles();
+
+if (drop) {
+  drop.addEventListener('click', function () { fileInput.click(); });
+  drop.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+  });
+  fileInput.addEventListener('change', function () {
+    addFiles(fileInput.files);
+    fileInput.value = '';
+  });
+  ['dragenter', 'dragover'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
+  });
+  ['dragleave', 'drop'].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
+  });
+  drop.addEventListener('drop', function (e) {
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+  });
+}
+
 /* ---- plain-text transcript ---- */
 function transcript() {
   var out = ['CLIENT QUESTIONNAIRE \u2014 answers', ''];
   out.push('Name:    ' + form._name.value);
   out.push('Company: ' + form._company.value);
   out.push('Email:   ' + form._email.value);
+  if (typeof uploads !== 'undefined') {
+    var sent = uploads.filter(function (u) { return u.state === 'done'; });
+    if (sent.length) {
+      out.push('');
+      out.push('Files attached: ' + sent.map(function (u) { return u.name; }).join(', '));
+    }
+  }
   out.push('');
   document.querySelectorAll('form section').forEach(function (sec) {
     if (sec.classList.contains('optional') && (!wantSite || !wantSite.checked)) return;
@@ -1070,6 +1335,12 @@ form.addEventListener('submit', function (e) {
     return;
   }
 
+  if (uploads.some(function (u) { return u.state === 'uploading'; })) {
+    status.className = 'status bad';
+    status.textContent = 'A file is still uploading \u2014 give it a second.';
+    return;
+  }
+
   if (form._website.value) {           // honeypot: only a bot fills this
     document.body.classList.add('submitted');
     document.getElementById('donePanel').classList.add('show');
@@ -1077,9 +1348,11 @@ form.addEventListener('submit', function (e) {
   }
 
   var wantsSite = !!(wantSite && wantSite.checked);
+  var attached = uploads.filter(function (u) { return u.state === 'done'; });
   var payload = {
     _submittedAt: new Date().toISOString(),
     _wantsWebsite: wantsSite ? 'Yes' : 'No',
+    _files: attached.map(function (u) { return { name: u.name, url: u.url }; }),
     _transcript: transcript()
   };
   fields.forEach(function (f) {
