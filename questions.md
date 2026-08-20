@@ -16,7 +16,7 @@ B2 Should anyone see only their own accounts, or be kept away from money — com
 ## C. How the work actually runs
 
 C1 Attach the spreadsheets and documents you run the business on today. If you'd rather not send them, describe what's in each. (This one is worth more than the rest of the form put together — it shows us how you already work instead of how you'd describe it.)
-C2 Walk a deal from first conversation to product on the shelf. Name each stage the way you'd say it out loud.
+C2 Walk us through a deal, from first conversation to product on the shelf. What do you call each stage?
 C3 How do line reviews and modular resets drive your calendar, and how far ahead do you start?
 C4 What falls through the cracks most often? Tell us about the last one that cost you.
 
