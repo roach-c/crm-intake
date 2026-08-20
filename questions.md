@@ -6,7 +6,7 @@ Short answers are fine. "I don't know yet" is a real answer.
 ## A. The business
 
 A1 ★ In one or two sentences: what does your company do?
-A2 ★ How do you get paid — commission on shipped sales, monthly retainer, project fee, or a mix? Roughly what's the split?
+A2 ★ How do you get paid — commission on shipped sales, monthly retainer, project fee, or a mix? (No numbers needed here. It decides whether the system needs commission math at all, which is the single biggest fork in what we build.)
 A3 How many brands/suppliers are you working with right now? How many in two years?
 A4 ★ Which retailers and distributors do you sell into? (Walmart, Sam's, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane, C&S…)
 A5 Which categories/departments do you live in, and does the process differ between them?
