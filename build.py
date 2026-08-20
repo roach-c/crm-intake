@@ -548,11 +548,9 @@ for ln in open(SRC_MD).read().splitlines():
 NOTES = {
  "A": "The shape of the company. This decides what the system is even counting.",
  "B": "Logins and what each person is allowed to see. Easier to decide now than to unwind later.",
- "C": "Every field you name here becomes something you can sort, filter, and report on. Every one you forget becomes a note nobody reads.",
- "D": "Your pipeline, in your own vocabulary. We'll build the stages to match what you say here, not the other way around.",
- "E": "Commission math is the part that's different at every firm, and the part that's most painful to bolt on afterward.",
- "F": "What the system should chase you about, and what it should hand you at the end of the month.",
- "G": "What this has to live alongside, what has to come across from the old way, and what the real constraints are.",
+ "C": "Your pipeline in your own vocabulary, and the paperwork around it. We build the stages to match what you say here, not the other way around.",
+ "D": "Commission math is the part that's different at every firm, and the part that's most painful to bolt on afterward.",
+ "E": "What this has to live alongside, when it has to be ready, and what would make it worth having.",
  "W": "Only fill this in if a website is part of the job. It's optional \u2014 skip the whole section and nothing about the CRM changes.",
  "H": "",
 }
@@ -562,9 +560,8 @@ OPTIONAL = {"W"}
 for s in sections:
     s["note"] = NOTES.get(s["letter"], "")
 
-TITLES = {"A":"The business","B":"Who's in it","C":"What you keep track of","D":"How a deal moves",
-          "E":"Money","F":"Reminders and reporting","G":"Systems and ground rules",
-          "W":"If you also want a website","H":"One last one"}
+TITLES = {"A":"The business","B":"Who's in it","C":"How the work actually runs","D":"Money",
+          "E":"Ground rules","W":"If you also want a website"}
 for s in sections:
     s["title"] = TITLES.get(s["letter"], s["title"])
     s["optional"] = s["letter"] in OPTIONAL
@@ -703,8 +700,8 @@ doc = f"""<!doctype html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Before We Build Your CRM</title>
-<meta name="description" content="A short discovery questionnaire so your CRM gets built around how you actually work.">
+<title>Client Questionnaire</title>
+<meta name="description" content="A short questionnaire so what we build gets built around how you actually work.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -749,17 +746,17 @@ doc = f"""<!doctype html>
       </svg>
       <span class="mark-word">Tethered&nbsp;Crew</span>
     </div>
-    <div class="eyebrow"><span class="dot"></span> Discovery questionnaire &nbsp;&#183;&nbsp; CRM build</div>
-    <h1>Before we build your CRM</h1>
+    <div class="eyebrow"><span class="dot"></span> Discovery &nbsp;&#183;&nbsp; Tethered Crew</div>
+    <h1>Client questionnaire</h1>
     <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your commission math, your line-review calendar &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
     <dl class="howto">
       <div>
         <dt>Who fills this out</dt>
-        <dd>Whoever runs the day-to-day. Pull in a rep for Sections C and D if they know the workflow better.</dd>
+        <dd>Whoever runs the day-to-day. Pull in a rep for Section C if they know the workflow better.</dd>
       </div>
       <div>
-        <dt>Short on time</dt>
-        <dd>Answer the <span class="star">&#9733;</span> questions first &mdash; that's about fifteen minutes and enough to start.</dd>
+        <dt>How long it takes</dt>
+        <dd>About ten minutes. It's deliberately short &mdash; every question here changes something we'd build.</dd>
       </div>
       <div>
         <dt>You can stop anytime</dt>
@@ -924,7 +921,7 @@ fields.forEach(function (f) {{
 
 /* ---- plain-text transcript ---- */
 function transcript() {{
-  var out = ['BEFORE WE BUILD YOUR CRM \\u2014 answers', ''];
+  var out = ['CLIENT QUESTIONNAIRE \\u2014 answers', ''];
   out.push('Name:    ' + form._name.value);
   out.push('Company: ' + form._company.value);
   out.push('Email:   ' + form._email.value);
@@ -949,7 +946,7 @@ document.getElementById('copyBtn').addEventListener('click', function () {{
   var blob = new Blob([transcript()], {{ type: 'text/plain' }});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'crm-questionnaire-' + (form._company.value.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'answers') + '.txt';
+  a.download = 'client-questionnaire-' + (form._company.value.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'answers') + '.txt';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);

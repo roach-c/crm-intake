@@ -1,7 +1,7 @@
 # Client Questionnaire — self-hosted
 
-A single static page that asks a prospective client 40 questions — plus an
-optional 6-question website section they opt into with a checkbox — saves
+A single static page that asks a prospective client 15 questions — plus an
+optional 3-question website section they opt into with a checkbox — saves
 their progress as they type, and sends the answers to a Google Sheet + your
 inbox. Runs on GitHub Pages (or any static host). No form service, no monthly
 cost, no third-party account beyond the Google one you already have.
@@ -102,8 +102,7 @@ This catches everybody once.
 - Answers autosave to their browser as they type — they can close the tab and
   come back; nothing is lost
 - A **Save a copy** button that downloads their answers as a text file
-- Stars marking the 20 questions that matter most, so a 15-minute pass is viable
-- Sections A–G, then W. Section W is optional and collapsed by default: it only opens if they tick
+- Sections A–E, then W. Section W is optional and collapsed by default: it only opens if they tick
   "a website is part of this", and it never counts against the progress bar
 - If the send fails, a clear recovery path instead of a lost hour of typing
 
@@ -120,7 +119,10 @@ This catches everybody once.
 
 `index.html` is generated. Don't hand-edit it — edit the source and rebuild:
 
-1. Edit `questions.md` (the questions, in plain markdown; `★` marks a priority one)
+1. Edit `questions.md` (the questions, in plain markdown). A trailing
+   parenthetical longer than 25 characters becomes the grey hint under the
+   question. A leading `★` marks a priority question — nothing uses it now
+   that the set is short enough that every question is a priority.
 2. Run `python3 build.py`
 3. Commit and push `index.html`
 
@@ -132,6 +134,8 @@ lists in `Code.gs` so the Sheet column lines up — append new codes at the **en
 of `CODES`, never in the middle, or every column shifts under the rows already
 there. To *retire* a question, take it out of `questions.md` but leave its code
 in `CODES` and add it to `RETIRED_CODES`: the old column keeps its data and
-stops being counted (this is what happened to `H1`). `getSheet_` widens the header row on the next submission. To make a whole
+stops being counted. If the whole set is reshuffled, change `SHEET_NAME`
+instead so a clean tab is created and the old answers stay readable under
+the old headers. `getSheet_` widens the header row on the next submission. To make a whole
 section opt-in like the website one, add its letter to `OPTIONAL` in `build.py`
 and to `OPTIONAL_CODES` in `Code.gs`.
