@@ -5,7 +5,7 @@ Short answers are fine. "I don't know yet" is a real answer.
 
 ## A. The business
 
-A1 ★ In one or two sentences: what does your company do, and who writes you the check?
+A1 ★ In one or two sentences: what does your company do?
 A2 ★ How do you get paid — commission on shipped sales, monthly retainer, project fee, or a mix? Roughly what's the split?
 A3 How many brands/suppliers are you working with right now? How many in two years?
 A4 ★ Which retailers and distributors do you sell into? (Walmart, Sam's, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane, C&S…)
