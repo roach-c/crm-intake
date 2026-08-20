@@ -701,7 +701,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
 
 <div class="progress">
   <div class="progress-inner">
-    <span class="progress-count"><span id="answered">0</span> / 14 answered</span>
+    <span class="progress-count"><span id="answered">0</span> / 13 answered</span>
     <span class="progress-track"><span class="progress-fill" id="bar"></span></span>
     <nav class="sec-nav" aria-label="Jump to section">
       <a href="#sec-A" data-sec="A">A</a>
@@ -945,14 +945,6 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
-    <div class="q">
-      <div class="q-code">E3</div>
-      <div class="q-body">
-        <label class="q-text" for="E3">If version one only did three things, which three?</label>
-        <textarea class="answer" id="E3" name="E3" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
-      </div>
-    </div>
   </section>
   <section id="sec-W" class="optional">
     <div class="sec-head">
@@ -1082,7 +1074,7 @@ var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sec-nav a'
 function tally() {
   var n = qFields.filter(function (f) { return f.value.trim(); }).length;
   answeredEl.textContent = n;
-  bar.style.width = (n / 14 * 100) + '%';
+  bar.style.width = (n / 13 * 100) + '%';
   navLinks.forEach(function (a) {
     var sec = document.getElementById('sec-' + a.dataset.sec);
     if (!sec) return;

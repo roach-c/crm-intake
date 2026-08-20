@@ -1,6 +1,6 @@
 # Client Questionnaire — self-hosted
 
-A single static page that asks a prospective client 14 questions — plus an
+A single static page that asks a prospective client 13 questions — plus an
 optional 3-question website section they opt into with a checkbox — saves
 their progress as they type, and sends the answers to a Google Sheet + your
 inbox. Runs on GitHub Pages (or any static host). No form service, no monthly
