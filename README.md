@@ -1,6 +1,6 @@
 # CRM Discovery Questionnaire — self-hosted
 
-A single static page that asks a prospective CRM client 41 questions — plus an
+A single static page that asks a prospective CRM client 40 questions — plus an
 optional 6-question website section they opt into with a checkbox — saves
 their progress as they type, and sends the answers to a Google Sheet + your
 inbox. Runs on GitHub Pages (or any static host). No form service, no monthly
@@ -102,8 +102,8 @@ This catches everybody once.
 - Answers autosave to their browser as they type — they can close the tab and
   come back; nothing is lost
 - A **Save a copy** button that downloads their answers as a text file
-- Stars marking the 21 questions that matter most, so a 15-minute pass is viable
-- Section W is optional and collapsed by default: it only opens if they tick
+- Stars marking the 20 questions that matter most, so a 15-minute pass is viable
+- Sections A–G, then W. Section W is optional and collapsed by default: it only opens if they tick
   "a website is part of this", and it never counts against the progress bar
 - If the send fails, a clear recovery path instead of a lost hour of typing
 
@@ -130,6 +130,8 @@ there too. Re-running it reproduces `index.html` byte for byte.
 If you add or remove a question, add the same code to the `CODES` and `LABELS`
 lists in `Code.gs` so the Sheet column lines up — append new codes at the **end**
 of `CODES`, never in the middle, or every column shifts under the rows already
-there. `getSheet_` widens the header row on the next submission. To make a whole
+there. To *retire* a question, take it out of `questions.md` but leave its code
+in `CODES` and add it to `RETIRED_CODES`: the old column keeps its data and
+stops being counted (this is what happened to `H1`). `getSheet_` widens the header row on the next submission. To make a whole
 section opt-in like the website one, add its letter to `OPTIONAL` in `build.py`
 and to `OPTIONAL_CODES` in `Code.gs`.

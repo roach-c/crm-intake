@@ -618,7 +618,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
 
 <div class="progress">
   <div class="progress-inner">
-    <span class="progress-count"><span id="answered">0</span> / 41 answered</span>
+    <span class="progress-count"><span id="answered">0</span> / 40 answered</span>
     <span class="progress-track"><span class="progress-fill" id="bar"></span></span>
     <nav class="sec-nav" aria-label="Jump to section">
       <a href="#sec-A" data-sec="A">A</a>
@@ -629,7 +629,6 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <a href="#sec-F" data-sec="F">F</a>
       <a href="#sec-G" data-sec="G">G</a>
       <a href="#sec-W" data-sec="W" class="opt">W</a>
-      <a href="#sec-H" data-sec="H">H</a>
     </nav>
     <span class="saved-flag" id="savedFlag">Saved</span>
   </div>
@@ -1139,21 +1138,6 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     </div>
     </div>
   </section>
-  <section id="sec-H">
-    <div class="sec-head">
-      <div class="sec-letter">H</div>
-      <h2 class="sec-title">One last one</h2>
-    </div>
-
-    <div class="q">
-      <div class="q-code">H1</div>
-      <div class="q-body">
-        <label class="q-text" for="H1"><span class="star" title="Answer this one if you answer nothing else">&#9733;</span>What would make this a win for you — and what would make you regret it? Both answers are useful, and the second one more than the first.</label>
-        <textarea class="answer tall" id="H1" name="H1" rows="2"
-          data-star="true" placeholder="Type your answer&#8230;"></textarea>
-      </div>
-    </div>
-  </section>
 
   <div class="closer">
     <h2>That's everything</h2>
@@ -1236,7 +1220,7 @@ var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sec-nav a'
 function tally() {
   var n = qFields.filter(function (f) { return f.value.trim(); }).length;
   answeredEl.textContent = n;
-  bar.style.width = (n / 41 * 100) + '%';
+  bar.style.width = (n / 40 * 100) + '%';
   navLinks.forEach(function (a) {
     var sec = document.getElementById('sec-' + a.dataset.sec);
     if (!sec) return;

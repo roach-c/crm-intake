@@ -75,8 +75,4 @@ W4 What already exists that we can use? (logo files, headshots, product photogra
 W5 Who updates the site after launch — us, someone on your staff, or do you want to be able to edit it yourself without calling anybody?
 W6 Should leads from the site's contact form land straight in the CRM as a new record, and who gets pinged when one comes in?
 
-## Last one
-
-What would make this a win for you — and what would make you regret it? Both answers are useful, and the second one more than the first.
-
 Completed by: ______________  Company: ______________  Date: ______
