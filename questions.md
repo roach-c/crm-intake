@@ -6,6 +6,7 @@ Short answers are fine. "I don't know yet" is a real answer.
 
 A1 What does your company do? (One or two sentences is plenty.)
 A2 Which retailers do you sell into, and how many brands do you represent? (Walmart, Sam's, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane… a rough count is fine.)
+A3 Attach your logo and the logos of the brands you represent. (Vector files if you have them, otherwise the biggest PNG you can find. A link to where they live works too, and "send later" is a fine answer.)
 
 ## B. Who's in it
 

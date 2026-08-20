@@ -3,9 +3,16 @@ import re, html, json, os
 SRC_MD   = "questions.md"   # edit this to change the questions, then re-run
 OUT      = "index.html"
 
-ATTACH_TO = "C1"            # this question gets a file uploader under its box
+# Questions that get a file uploader under their box: code -> the fine print
+# and the accept list for that particular ask.
+ATTACH_TO = {
+  "C1": ("spreadsheets, PDFs, decks, screenshots",
+         ".xlsx,.xls,.csv,.numbers,.pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg,.heic,.txt,.zip"),
+  "A3": ("SVG, EPS, AI, PDF, PNG &#8212; whatever you have",
+         ".svg,.eps,.ai,.pdf,.png,.jpg,.jpeg,.webp,.zip"),
+}
 MAX_FILE_MB = 10            # per file; the backend enforces the same ceiling
-MAX_FILES = 8
+MAX_FILES = 8               # across the whole form, not per uploader
 
 TC_CSS = r'''
 /* ==========================================================================
@@ -581,11 +588,14 @@ nav = "\n".join(
     f'{" class=\"opt\"" if s["optional"] else ""}>{s["letter"]}</a>'
     for s in sections)
 
-ATTACH_HTML = f"""
-        <div class="attach" id="attach">
-          <input type="file" id="fileInput" multiple
-            accept=".xlsx,.xls,.csv,.numbers,.pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg,.heic,.txt,.zip">
-          <div class="attach-drop" id="drop" tabindex="0" role="button"
+attach_json = json.dumps([c for c in ATTACH_TO])
+
+def attach_html(code):
+    fine, accept = ATTACH_TO[code]
+    return f"""
+        <div class="attach" data-attach="{code}">
+          <input type="file" id="fileInput-{code}" multiple accept="{accept}">
+          <div class="attach-drop" id="drop-{code}" tabindex="0" role="button"
             aria-label="Attach files, or drag them here">
             <svg class="attach-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" fill="none" stroke-width="1.7"
@@ -596,11 +606,11 @@ ATTACH_HTML = f"""
             <span class="attach-copy">
               <strong>Attach the files</strong>
               <span class="attach-fine">Drag them here, or click to choose &#183;
-                spreadsheets, PDFs, decks, screenshots &#183; up to {MAX_FILE_MB}&#8239;MB each</span>
+                {fine} &#183; up to {MAX_FILE_MB}&#8239;MB each</span>
             </span>
           </div>
-          <ul class="attach-list" id="fileList"></ul>
-          <p class="attach-note" id="attachNote">Nothing here is shared with anyone. If a file
+          <ul class="attach-list" id="fileList-{code}"></ul>
+          <p class="attach-note" id="attachNote-{code}">Nothing here is shared with anyone. If a file
             is too big or won&#8217;t upload, answer in the box above and email it instead.</p>
         </div>"""
 
@@ -611,7 +621,7 @@ for s in sections:
         star = '<span class="star" title="Answer this one if you answer nothing else">&#9733;</span>' if q["star"] else ""
         hint = f'\n        <p class="q-hint">{esc(q["hint"])}</p>' if q["hint"] else ""
         tall = " tall" if q["hint"] or len(q["text"]) > 130 else ""
-        attach = ATTACH_HTML if q["code"] == ATTACH_TO else ""
+        attach = attach_html(q["code"]) if q["code"] in ATTACH_TO else ""
         qs.append(f"""    <div class="q">
       <div class="q-code">{q["code"]}</div>
       <div class="q-body">
@@ -1039,19 +1049,14 @@ fields.forEach(function (f) {{
 ------------------------------------------------------------------ */
 var MAX_BYTES = {MAX_FILE_MB} * 1024 * 1024;
 var MAX_FILES = {MAX_FILES};
-var uploads = [];                       /* {{ name, size, url, state }} */
+var ATTACH_QS = {attach_json};
+var uploads = [];                       /* {{ q, name, size, url, state }} */
 (function restoreFiles() {{
   var raw;
   try {{ raw = localStorage.getItem(KEY); }} catch (e) {{ return; }}
   if (!raw) return;
-  try {{ uploads = (JSON.parse(raw).__files || []).slice(0, {MAX_FILES}); }} catch (e) {{}}
+  try {{ uploads = (JSON.parse(raw).__files || []).slice(0, MAX_FILES); }} catch (e) {{}}
 }})();
-
-var drop      = document.getElementById('drop');
-var fileInput = document.getElementById('fileInput');
-var fileList  = document.getElementById('fileList');
-var attachNote = document.getElementById('attachNote');
-var NOTE_DEFAULT = attachNote ? attachNote.innerHTML : '';
 
 function human(bytes) {{
   if (bytes < 1024) return bytes + ' B';
@@ -1059,53 +1064,61 @@ function human(bytes) {{
   return (bytes / 1024 / 1024).toFixed(1) + ' MB';
 }}
 
-function noteBad(msg) {{
-  if (!attachNote) return;
-  attachNote.textContent = msg;
-  attachNote.className = 'attach-note bad';
-}}
-
-function noteReset() {{
-  if (!attachNote) return;
-  attachNote.innerHTML = NOTE_DEFAULT;
-  attachNote.className = 'attach-note';
-}}
-
 var STATE_WORDS = {{ uploading: 'Sending', done: 'Attached', failed: 'Failed' }};
+var zones = {{}};
+
+function noteBad(code, msg) {{
+  var z = zones[code];
+  if (!z) return;
+  z.note.textContent = msg;
+  z.note.className = 'attach-note bad';
+}}
+
+function noteReset(code) {{
+  var z = zones[code];
+  if (!z) return;
+  z.note.innerHTML = z.noteDefault;
+  z.note.className = 'attach-note';
+}}
 
 function renderFiles() {{
-  if (!fileList) return;
-  fileList.innerHTML = '';
-  uploads.forEach(function (u, i) {{
-    var li = document.createElement('li');
-    li.className = u.state;
+  ATTACH_QS.forEach(function (code) {{
+    var z = zones[code];
+    if (!z) return;
+    z.list.innerHTML = '';
+    uploads.forEach(function (u) {{
+      if (u.q !== code) return;
+      var li = document.createElement('li');
+      li.className = u.state;
 
-    var name = document.createElement('span');
-    name.className = 'file-name';
-    name.textContent = u.name + '  \u00b7  ' + human(u.size);
+      var name = document.createElement('span');
+      name.className = 'file-name';
+      name.textContent = u.name + '  \u00b7  ' + human(u.size);
 
-    var state = document.createElement('span');
-    state.className = 'file-state';
-    state.textContent = STATE_WORDS[u.state] || u.state;
+      var state = document.createElement('span');
+      state.className = 'file-state';
+      state.textContent = STATE_WORDS[u.state] || u.state;
 
-    var x = document.createElement('button');
-    x.type = 'button';
-    x.className = 'file-drop';
-    x.setAttribute('aria-label', 'Remove ' + u.name);
-    x.textContent = '\u00d7';
-    x.addEventListener('click', function () {{
-      uploads.splice(i, 1);
-      renderFiles();
-      save();
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'file-drop';
+      x.setAttribute('aria-label', 'Remove ' + u.name);
+      x.textContent = '\u00d7';
+      x.addEventListener('click', function () {{
+        var at = uploads.indexOf(u);
+        if (at > -1) uploads.splice(at, 1);
+        renderFiles();
+        save();
+      }});
+
+      li.appendChild(name); li.appendChild(state); li.appendChild(x);
+      z.list.appendChild(li);
     }});
-
-    li.appendChild(name); li.appendChild(state); li.appendChild(x);
-    fileList.appendChild(li);
   }});
 }}
 
-function uploadFile(file) {{
-  var entry = {{ name: file.name, size: file.size, url: '', state: 'uploading' }};
+function uploadFile(code, file) {{
+  var entry = {{ q: code, name: file.name, size: file.size, url: '', state: 'uploading' }};
   uploads.push(entry);
   renderFiles();
 
@@ -1113,7 +1126,7 @@ function uploadFile(file) {{
   reader.onerror = function () {{
     entry.state = 'failed';
     renderFiles();
-    noteBad('Couldn’t read ' + file.name + '. Email that one instead.');
+    noteBad(code, 'Couldn’t read ' + file.name + '. Email that one instead.');
   }};
   reader.onload = function () {{
     var b64 = String(reader.result).split(',')[1] || '';
@@ -1124,6 +1137,7 @@ function uploadFile(file) {{
         _kind: 'file',
         _company: form._company.value,
         _name: form._name.value,
+        question: code,
         filename: file.name,
         mimeType: file.type || 'application/octet-stream',
         data: b64
@@ -1140,37 +1154,43 @@ function uploadFile(file) {{
       .catch(function () {{
         entry.state = 'failed';
         renderFiles();
-        noteBad(file.name + ' didn’t upload. Send that one by email \u2014 everything else is fine.');
+        noteBad(code, file.name + ' didn’t upload. Send that one by email \u2014 everything else is fine.');
       }});
   }};
   reader.readAsDataURL(file);
 }}
 
-function addFiles(list) {{
-  noteReset();
+function addFiles(code, list) {{
+  noteReset(code);
   Array.prototype.slice.call(list).forEach(function (file) {{
     if (uploads.length >= MAX_FILES) {{
-      noteBad('That’s ' + MAX_FILES + ' files \u2014 the limit. Email any others along.');
+      noteBad(code, 'That’s ' + MAX_FILES + ' files \u2014 the limit across the whole form. Email any others along.');
       return;
     }}
     if (file.size > MAX_BYTES) {{
-      noteBad(file.name + ' is ' + human(file.size) + '. The limit here is {MAX_FILE_MB} MB \u2014 email that one instead.');
+      noteBad(code, file.name + ' is ' + human(file.size) + '. The limit here is {MAX_FILE_MB} MB \u2014 email that one instead.');
       return;
     }}
-    uploadFile(file);
+    uploadFile(code, file);
   }});
 }}
 
-renderFiles();
+ATTACH_QS.forEach(function (code) {{
+  var drop  = document.getElementById('drop-' + code);
+  var input = document.getElementById('fileInput-' + code);
+  var list  = document.getElementById('fileList-' + code);
+  var note  = document.getElementById('attachNote-' + code);
+  if (!drop || !input || !list || !note) return;
 
-if (drop) {{
-  drop.addEventListener('click', function () {{ fileInput.click(); }});
+  zones[code] = {{ drop: drop, input: input, list: list, note: note, noteDefault: note.innerHTML }};
+
+  drop.addEventListener('click', function () {{ input.click(); }});
   drop.addEventListener('keydown', function (e) {{
-    if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); fileInput.click(); }}
+    if (e.key === 'Enter' || e.key === ' ') {{ e.preventDefault(); input.click(); }}
   }});
-  fileInput.addEventListener('change', function () {{
-    addFiles(fileInput.files);
-    fileInput.value = '';
+  input.addEventListener('change', function () {{
+    addFiles(code, input.files);
+    input.value = '';
   }});
   ['dragenter', 'dragover'].forEach(function (ev) {{
     drop.addEventListener(ev, function (e) {{ e.preventDefault(); drop.classList.add('over'); }});
@@ -1179,9 +1199,11 @@ if (drop) {{
     drop.addEventListener(ev, function (e) {{ e.preventDefault(); drop.classList.remove('over'); }});
   }});
   drop.addEventListener('drop', function (e) {{
-    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(code, e.dataTransfer.files);
   }});
-}}
+}});
+
+renderFiles();
 
 /* ---- plain-text transcript ---- */
 function transcript() {{
@@ -1258,7 +1280,7 @@ form.addEventListener('submit', function (e) {{
   var payload = {{
     _submittedAt: new Date().toISOString(),
     _wantsWebsite: wantsSite ? 'Yes' : 'No',
-    _files: attached.map(function (u) {{ return {{ name: u.name, url: u.url }}; }}),
+    _files: attached.map(function (u) {{ return {{ q: u.q, name: u.name, url: u.url }}; }}),
     _transcript: transcript()
   }};
   fields.forEach(function (f) {{

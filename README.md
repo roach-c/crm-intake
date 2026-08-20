@@ -1,6 +1,6 @@
 # Client Questionnaire — self-hosted
 
-A single static page that asks a prospective client 10 questions — plus an
+A single static page that asks a prospective client 11 questions — plus an
 optional 3-question website section they opt into with a checkbox — saves
 their progress as they type, and sends the answers to a Google Sheet + your
 inbox. Runs on GitHub Pages (or any static host). No form service, no monthly
@@ -101,7 +101,8 @@ This catches everybody once.
 - Progress bar and section jump links at the top
 - Answers autosave to their browser as they type — they can close the tab and
   come back; nothing is lost
-- A file uploader under C1 — drag-and-drop, up to 8 files at 10 MB each. Each
+- File uploaders under A3 (logos) and C1 (spreadsheets) — drag-and-drop, up to
+  8 files at 10 MB each across the form. Each
   file uploads on its own request the moment it's picked, so a big spreadsheet
   can't take the answers down with it, and the links survive a closed tab
 - A **Save a copy** button that downloads their answers as a text file
@@ -131,8 +132,9 @@ This catches everybody once.
 2. Run `python3 build.py`
 3. Commit and push `index.html`
 
-`ATTACH_TO` at the top of `build.py` decides which question carries the file
-uploader (`C1`), alongside `MAX_FILE_MB` and `MAX_FILES`. The backend enforces
+`ATTACH_TO` at the top of `build.py` maps question codes to the uploaders they
+carry — each entry is `(fine print, accept list)`, so adding a third is one line.
+`MAX_FILE_MB` and `MAX_FILES` sit alongside it. The backend enforces
 its own ceiling in `MAX_UPLOAD_BYTES` — raise both or neither.
 
 `build.py` also holds the stylesheet and the page markup, so design changes go

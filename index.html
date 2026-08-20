@@ -701,7 +701,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
 
 <div class="progress">
   <div class="progress-inner">
-    <span class="progress-count"><span id="answered">0</span> / 10 answered</span>
+    <span class="progress-count"><span id="answered">0</span> / 11 answered</span>
     <span class="progress-track"><span class="progress-fill" id="bar"></span></span>
     <nav class="sec-nav" aria-label="Jump to section">
       <a href="#sec-A" data-sec="A">A</a>
@@ -793,6 +793,35 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
+    <div class="q">
+      <div class="q-code">A3</div>
+      <div class="q-body">
+        <label class="q-text" for="A3">Attach your logo and the logos of the brands you represent.</label>
+        <p class="q-hint">Vector files if you have them, otherwise the biggest PNG you can find. A link to where they live works too, and &quot;send later&quot; is a fine answer.</p>
+        <textarea class="answer tall" id="A3" name="A3" rows="2"
+          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+        <div class="attach" data-attach="A3">
+          <input type="file" id="fileInput-A3" multiple accept=".svg,.eps,.ai,.pdf,.png,.jpg,.jpeg,.webp,.zip">
+          <div class="attach-drop" id="drop-A3" tabindex="0" role="button"
+            aria-label="Attach files, or drag them here">
+            <svg class="attach-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" fill="none" stroke-width="1.7"
+                stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15"
+                fill="none" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            <span class="attach-copy">
+              <strong>Attach the files</strong>
+              <span class="attach-fine">Drag them here, or click to choose &#183;
+                SVG, EPS, AI, PDF, PNG &#8212; whatever you have &#183; up to 10&#8239;MB each</span>
+            </span>
+          </div>
+          <ul class="attach-list" id="fileList-A3"></ul>
+          <p class="attach-note" id="attachNote-A3">Nothing here is shared with anyone. If a file
+            is too big or won&#8217;t upload, answer in the box above and email it instead.</p>
+        </div>
+      </div>
+    </div>
   </section>
   <section id="sec-B">
     <div class="sec-head">
@@ -834,10 +863,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
         <p class="q-hint">Worth more than the rest of this form put together. If you&#x27;d rather not send files, list what they are and what&#x27;s in them.</p>
         <textarea class="answer tall" id="C1" name="C1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
-        <div class="attach" id="attach">
-          <input type="file" id="fileInput" multiple
-            accept=".xlsx,.xls,.csv,.numbers,.pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg,.heic,.txt,.zip">
-          <div class="attach-drop" id="drop" tabindex="0" role="button"
+        <div class="attach" data-attach="C1">
+          <input type="file" id="fileInput-C1" multiple accept=".xlsx,.xls,.csv,.numbers,.pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg,.heic,.txt,.zip">
+          <div class="attach-drop" id="drop-C1" tabindex="0" role="button"
             aria-label="Attach files, or drag them here">
             <svg class="attach-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5" fill="none" stroke-width="1.7"
@@ -851,8 +879,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
                 spreadsheets, PDFs, decks, screenshots &#183; up to 10&#8239;MB each</span>
             </span>
           </div>
-          <ul class="attach-list" id="fileList"></ul>
-          <p class="attach-note" id="attachNote">Nothing here is shared with anyone. If a file
+          <ul class="attach-list" id="fileList-C1"></ul>
+          <p class="attach-note" id="attachNote-C1">Nothing here is shared with anyone. If a file
             is too big or won&#8217;t upload, answer in the box above and email it instead.</p>
         </div>
       </div>
@@ -1039,7 +1067,7 @@ var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sec-nav a'
 function tally() {
   var n = qFields.filter(function (f) { return f.value.trim(); }).length;
   answeredEl.textContent = n;
-  bar.style.width = (n / 10 * 100) + '%';
+  bar.style.width = (n / 11 * 100) + '%';
   navLinks.forEach(function (a) {
     var sec = document.getElementById('sec-' + a.dataset.sec);
     if (!sec) return;
@@ -1092,19 +1120,14 @@ fields.forEach(function (f) {
 ------------------------------------------------------------------ */
 var MAX_BYTES = 10 * 1024 * 1024;
 var MAX_FILES = 8;
-var uploads = [];                       /* { name, size, url, state } */
+var ATTACH_QS = ["C1", "A3"];
+var uploads = [];                       /* { q, name, size, url, state } */
 (function restoreFiles() {
   var raw;
   try { raw = localStorage.getItem(KEY); } catch (e) { return; }
   if (!raw) return;
-  try { uploads = (JSON.parse(raw).__files || []).slice(0, 8); } catch (e) {}
+  try { uploads = (JSON.parse(raw).__files || []).slice(0, MAX_FILES); } catch (e) {}
 })();
-
-var drop      = document.getElementById('drop');
-var fileInput = document.getElementById('fileInput');
-var fileList  = document.getElementById('fileList');
-var attachNote = document.getElementById('attachNote');
-var NOTE_DEFAULT = attachNote ? attachNote.innerHTML : '';
 
 function human(bytes) {
   if (bytes < 1024) return bytes + ' B';
@@ -1112,53 +1135,61 @@ function human(bytes) {
   return (bytes / 1024 / 1024).toFixed(1) + ' MB';
 }
 
-function noteBad(msg) {
-  if (!attachNote) return;
-  attachNote.textContent = msg;
-  attachNote.className = 'attach-note bad';
-}
-
-function noteReset() {
-  if (!attachNote) return;
-  attachNote.innerHTML = NOTE_DEFAULT;
-  attachNote.className = 'attach-note';
-}
-
 var STATE_WORDS = { uploading: 'Sending', done: 'Attached', failed: 'Failed' };
+var zones = {};
+
+function noteBad(code, msg) {
+  var z = zones[code];
+  if (!z) return;
+  z.note.textContent = msg;
+  z.note.className = 'attach-note bad';
+}
+
+function noteReset(code) {
+  var z = zones[code];
+  if (!z) return;
+  z.note.innerHTML = z.noteDefault;
+  z.note.className = 'attach-note';
+}
 
 function renderFiles() {
-  if (!fileList) return;
-  fileList.innerHTML = '';
-  uploads.forEach(function (u, i) {
-    var li = document.createElement('li');
-    li.className = u.state;
+  ATTACH_QS.forEach(function (code) {
+    var z = zones[code];
+    if (!z) return;
+    z.list.innerHTML = '';
+    uploads.forEach(function (u) {
+      if (u.q !== code) return;
+      var li = document.createElement('li');
+      li.className = u.state;
 
-    var name = document.createElement('span');
-    name.className = 'file-name';
-    name.textContent = u.name + '  ·  ' + human(u.size);
+      var name = document.createElement('span');
+      name.className = 'file-name';
+      name.textContent = u.name + '  ·  ' + human(u.size);
 
-    var state = document.createElement('span');
-    state.className = 'file-state';
-    state.textContent = STATE_WORDS[u.state] || u.state;
+      var state = document.createElement('span');
+      state.className = 'file-state';
+      state.textContent = STATE_WORDS[u.state] || u.state;
 
-    var x = document.createElement('button');
-    x.type = 'button';
-    x.className = 'file-drop';
-    x.setAttribute('aria-label', 'Remove ' + u.name);
-    x.textContent = '×';
-    x.addEventListener('click', function () {
-      uploads.splice(i, 1);
-      renderFiles();
-      save();
+      var x = document.createElement('button');
+      x.type = 'button';
+      x.className = 'file-drop';
+      x.setAttribute('aria-label', 'Remove ' + u.name);
+      x.textContent = '×';
+      x.addEventListener('click', function () {
+        var at = uploads.indexOf(u);
+        if (at > -1) uploads.splice(at, 1);
+        renderFiles();
+        save();
+      });
+
+      li.appendChild(name); li.appendChild(state); li.appendChild(x);
+      z.list.appendChild(li);
     });
-
-    li.appendChild(name); li.appendChild(state); li.appendChild(x);
-    fileList.appendChild(li);
   });
 }
 
-function uploadFile(file) {
-  var entry = { name: file.name, size: file.size, url: '', state: 'uploading' };
+function uploadFile(code, file) {
+  var entry = { q: code, name: file.name, size: file.size, url: '', state: 'uploading' };
   uploads.push(entry);
   renderFiles();
 
@@ -1166,7 +1197,7 @@ function uploadFile(file) {
   reader.onerror = function () {
     entry.state = 'failed';
     renderFiles();
-    noteBad('Couldn’t read ' + file.name + '. Email that one instead.');
+    noteBad(code, 'Couldn’t read ' + file.name + '. Email that one instead.');
   };
   reader.onload = function () {
     var b64 = String(reader.result).split(',')[1] || '';
@@ -1177,6 +1208,7 @@ function uploadFile(file) {
         _kind: 'file',
         _company: form._company.value,
         _name: form._name.value,
+        question: code,
         filename: file.name,
         mimeType: file.type || 'application/octet-stream',
         data: b64
@@ -1193,37 +1225,43 @@ function uploadFile(file) {
       .catch(function () {
         entry.state = 'failed';
         renderFiles();
-        noteBad(file.name + ' didn’t upload. Send that one by email — everything else is fine.');
+        noteBad(code, file.name + ' didn’t upload. Send that one by email — everything else is fine.');
       });
   };
   reader.readAsDataURL(file);
 }
 
-function addFiles(list) {
-  noteReset();
+function addFiles(code, list) {
+  noteReset(code);
   Array.prototype.slice.call(list).forEach(function (file) {
     if (uploads.length >= MAX_FILES) {
-      noteBad('That’s ' + MAX_FILES + ' files — the limit. Email any others along.');
+      noteBad(code, 'That’s ' + MAX_FILES + ' files — the limit across the whole form. Email any others along.');
       return;
     }
     if (file.size > MAX_BYTES) {
-      noteBad(file.name + ' is ' + human(file.size) + '. The limit here is 10 MB — email that one instead.');
+      noteBad(code, file.name + ' is ' + human(file.size) + '. The limit here is 10 MB — email that one instead.');
       return;
     }
-    uploadFile(file);
+    uploadFile(code, file);
   });
 }
 
-renderFiles();
+ATTACH_QS.forEach(function (code) {
+  var drop  = document.getElementById('drop-' + code);
+  var input = document.getElementById('fileInput-' + code);
+  var list  = document.getElementById('fileList-' + code);
+  var note  = document.getElementById('attachNote-' + code);
+  if (!drop || !input || !list || !note) return;
 
-if (drop) {
-  drop.addEventListener('click', function () { fileInput.click(); });
+  zones[code] = { drop: drop, input: input, list: list, note: note, noteDefault: note.innerHTML };
+
+  drop.addEventListener('click', function () { input.click(); });
   drop.addEventListener('keydown', function (e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fileInput.click(); }
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
   });
-  fileInput.addEventListener('change', function () {
-    addFiles(fileInput.files);
-    fileInput.value = '';
+  input.addEventListener('change', function () {
+    addFiles(code, input.files);
+    input.value = '';
   });
   ['dragenter', 'dragover'].forEach(function (ev) {
     drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add('over'); });
@@ -1232,9 +1270,11 @@ if (drop) {
     drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove('over'); });
   });
   drop.addEventListener('drop', function (e) {
-    if (e.dataTransfer && e.dataTransfer.files) addFiles(e.dataTransfer.files);
+    if (e.dataTransfer && e.dataTransfer.files) addFiles(code, e.dataTransfer.files);
   });
-}
+});
+
+renderFiles();
 
 /* ---- plain-text transcript ---- */
 function transcript() {
@@ -1311,7 +1351,7 @@ form.addEventListener('submit', function (e) {
   var payload = {
     _submittedAt: new Date().toISOString(),
     _wantsWebsite: wantsSite ? 'Yes' : 'No',
-    _files: attached.map(function (u) { return { name: u.name, url: u.url }; }),
+    _files: attached.map(function (u) { return { q: u.q, name: u.name, url: u.url }; }),
     _transcript: transcript()
   };
   fields.forEach(function (f) {
