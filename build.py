@@ -272,6 +272,28 @@ section { display: flex; flex-direction: column; gap: 1.5rem; }
   max-width: var(--measure);
 }
 
+.q-why {
+  margin: 0.34rem 0 0;
+  padding: 0 0 0 0.62rem;
+  border-left: 2px solid rgba(58, 94, 130, 0.3);
+  font-size: 0.83rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: var(--measure);
+}
+
+.q-why b {
+  font-weight: 600;
+  color: var(--accent-strong);
+  letter-spacing: 0.02em;
+}
+
+.q-why b::after {
+  content: ' \00b7 ';
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
 .answer,
 textarea.answer {
   width: 100%;
@@ -544,6 +566,8 @@ for ln in open(SRC_MD).read().splitlines():
     if ln.startswith("## Last one"):
         cur = {"letter": "H", "title": "One last one", "note": "", "qs": []}
         sections.append(cur); continue
+    if ln.startswith("> ") and cur and cur["qs"]:
+        cur["qs"][-1]["why"] = ln[2:].strip(); continue
     q = re.match(r'^([A-Z]\d+) (★ )?(.+)$', ln)
     if q and cur:
         code, star, text = q.group(1), bool(q.group(2)), q.group(3).strip()
@@ -551,9 +575,9 @@ for ln in open(SRC_MD).read().splitlines():
         hm = re.match(r'^(.*?) \(([^()]*)\)$', text)
         if hm and len(hm.group(2)) > 25:
             text, hint = hm.group(1).strip(), hm.group(2).strip()
-        cur["qs"].append({"code": code, "star": star, "text": text, "hint": hint}); continue
+        cur["qs"].append({"code": code, "star": star, "text": text, "hint": hint, "why": ""}); continue
     if cur and cur["letter"] == "H" and ln.strip() and not ln.startswith("Completed by"):
-        cur["qs"].append({"code": "H1", "star": True, "text": ln.strip(), "hint": ""})
+        cur["qs"].append({"code": "H1", "star": True, "text": ln.strip(), "hint": "", "why": ""})
 
 # section notes lifted from the printed sheet
 NOTES = {
@@ -620,14 +644,16 @@ for s in sections:
     for q in s["qs"]:
         star = '<span class="star" title="Answer this one if you answer nothing else">&#9733;</span>' if q["star"] else ""
         hint = f'\n        <p class="q-hint">{esc(q["hint"])}</p>' if q["hint"] else ""
+        why = (f'\n        <p class="q-why"><b>Why we ask</b>{esc(q["why"])}</p>'
+               if q.get("why") else "")
         tall = " tall" if q["hint"] or len(q["text"]) > 130 else ""
         attach = attach_html(q["code"]) if q["code"] in ATTACH_TO else ""
         qs.append(f"""    <div class="q">
       <div class="q-code">{q["code"]}</div>
       <div class="q-body">
-        <label class="q-text" for="{q["code"]}">{star}{esc(q["text"])}</label>{hint}
+        <label class="q-text" for="{q["code"]}">{star}{esc(q["text"])}</label>{hint}{why}
         <textarea class="answer{tall}" id="{q["code"]}" name="{q["code"]}" rows="2"
-          data-star="{str(q["star"]).lower()}" placeholder="Type your answer&#8230;"></textarea>{attach}
+          data-star="{str(q["star"]).lower()}" placeholder="Bullet points are fine&#8230;"></textarea>{attach}
       </div>
     </div>""")
     note = f'\n      <p class="sec-note">{esc(s["note"])}</p>' if s["note"] else ""
@@ -868,7 +894,7 @@ doc = f"""<!doctype html>
     </div>
     <div class="eyebrow"><span class="dot"></span> Discovery &nbsp;&#183;&nbsp; Tethered Crew</div>
     <h1>Client questionnaire</h1>
-    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your line-review calendar, the software you won't give up &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
+    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your line-review calendar, the software you won't give up &mdash; instead of a generic sales pipeline you'd have to fight. Answer in bullet points &mdash; fragments, lists, half-sentences are all fine, and nobody is grading the writing. Under each question is a short note on why we're asking, so you can see what we'll do with the answer. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
     <dl class="howto">
       <div>
         <dt>Who fills this out</dt>

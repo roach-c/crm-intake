@@ -268,6 +268,28 @@ section { display: flex; flex-direction: column; gap: 1.5rem; }
   max-width: var(--measure);
 }
 
+.q-why {
+  margin: 0.34rem 0 0;
+  padding: 0 0 0 0.62rem;
+  border-left: 2px solid rgba(58, 94, 130, 0.3);
+  font-size: 0.83rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: var(--measure);
+}
+
+.q-why b {
+  font-weight: 600;
+  color: var(--accent-strong);
+  letter-spacing: 0.02em;
+}
+
+.q-why b::after {
+  content: ' \00b7 ';
+  color: var(--text-faint);
+  font-weight: 400;
+}
+
 .answer,
 textarea.answer {
   width: 100%;
@@ -726,7 +748,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     </div>
     <div class="eyebrow"><span class="dot"></span> Discovery &nbsp;&#183;&nbsp; Tethered Crew</div>
     <h1>Client questionnaire</h1>
-    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your line-review calendar, the software you won't give up &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
+    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your line-review calendar, the software you won't give up &mdash; instead of a generic sales pipeline you'd have to fight. Answer in bullet points &mdash; fragments, lists, half-sentences are all fine, and nobody is grading the writing. Under each question is a short note on why we're asking, so you can see what we'll do with the answer. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
     <dl class="howto">
       <div>
         <dt>Who fills this out</dt>
@@ -780,8 +802,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="A1">What does your company do?</label>
         <p class="q-hint">One or two sentences is plenty.</p>
+        <p class="q-why"><b>Why we ask</b>Sets the vocabulary. What the system calls things comes from how you describe the work.</p>
         <textarea class="answer tall" id="A1" name="A1" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -789,8 +812,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="A2">Which retailers do you sell into, and how many brands do you represent?</label>
         <p class="q-hint">Walmart, Sam&#x27;s, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane… a rough count is fine.</p>
+        <p class="q-why"><b>Why we ask</b>Tells us how big the account and brand lists need to be, and whether one deal can span several retailers.</p>
         <textarea class="answer tall" id="A2" name="A2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -798,8 +822,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="A3">Attach your logo and the logos of the brands you represent.</label>
         <p class="q-hint">Vector files if you have them, otherwise the biggest PNG you can find. A link to where they live works too, and &quot;send later&quot; is a fine answer.</p>
+        <p class="q-why"><b>Why we ask</b>So it looks like your company the first time you open it, instead of something you have to rebrand later.</p>
         <textarea class="answer tall" id="A3" name="A3" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
         <div class="attach" data-attach="A3">
           <input type="file" id="fileInput-A3" multiple accept=".svg,.eps,.ai,.pdf,.png,.jpg,.jpeg,.webp,.zip">
           <div class="attach-drop" id="drop-A3" tabindex="0" role="button"
@@ -835,8 +860,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="B1">Who would log in?</label>
         <p class="q-hint">Names and roles. Mark whoever should be the admin.</p>
+        <p class="q-why"><b>Why we ask</b>We build the accounts before you ever see it, so your first login is your real one.</p>
         <textarea class="answer tall" id="B1" name="B1" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -844,8 +870,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="B2">Should everyone see everything, or should some people only see their own accounts?</label>
         <p class="q-hint">If it&#x27;s the second, say who&#x27;s limited to what.</p>
+        <p class="q-why"><b>Why we ask</b>Permissions are cheap to set now and disruptive to change once people have been working in it.</p>
         <textarea class="answer tall" id="B2" name="B2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
   </section>
@@ -861,8 +888,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="C1">Attach the spreadsheets and documents you run the business on today.</label>
         <p class="q-hint">Worth more than the rest of this form put together. If you&#x27;d rather not send files, list what they are and what&#x27;s in them.</p>
+        <p class="q-why"><b>Why we ask</b>Your spreadsheets are the real spec. They show the fields you actually use, which beats any description of them.</p>
         <textarea class="answer tall" id="C1" name="C1" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
         <div class="attach" data-attach="C1">
           <input type="file" id="fileInput-C1" multiple accept=".xlsx,.xls,.csv,.numbers,.pdf,.doc,.docx,.ppt,.pptx,.png,.jpg,.jpeg,.heic,.txt,.zip">
           <div class="attach-drop" id="drop-C1" tabindex="0" role="button"
@@ -890,8 +918,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="C2">List the stages a deal goes through, first conversation to product on the shelf.</label>
         <p class="q-hint">Your names for them, not ours. A list is fine — no sentences needed.</p>
+        <p class="q-why"><b>Why we ask</b>These become the actual pipeline. If we guess them, every deal gets logged in the wrong place.</p>
         <textarea class="answer tall" id="C2" name="C2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -899,8 +928,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="C3">When are your line reviews, and how far ahead do you start working them?</label>
         <p class="q-hint">Name the resets or review windows that set your calendar.</p>
+        <p class="q-why"><b>Why we ask</b>Your calendar drives every reminder. We can&#x27;t time one without knowing what it&#x27;s counting down to.</p>
         <textarea class="answer tall" id="C3" name="C3" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -908,8 +938,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="C4">What falls through the cracks most often?</label>
         <p class="q-hint">One example is enough — ideally the last one that cost you.</p>
+        <p class="q-why"><b>Why we ask</b>This is what the system is for. Name the failure and we&#x27;ll build the thing that catches it.</p>
         <textarea class="answer tall" id="C4" name="C4" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
   </section>
@@ -925,8 +956,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="D1">What software do you use today, and which of it can&#x27;t change?</label>
         <p class="q-hint">Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.</p>
+        <p class="q-why"><b>Why we ask</b>Separates what we replace from what we work around. Anything you can&#x27;t give up, we build to sit beside.</p>
         <textarea class="answer tall" id="D1" name="D1" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -934,8 +966,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="D2">Have you used a CRM before?</label>
         <p class="q-hint">Which one, and what made you stop.</p>
+        <p class="q-why"><b>Why we ask</b>What made you quit the last one is the most useful warning you can give us.</p>
         <textarea class="answer tall" id="D2" name="D2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
   </section>
@@ -958,8 +991,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="W1">Do you already own a domain?</label>
         <p class="q-hint">Who has the login, and is anything live there now?</p>
+        <p class="q-why"><b>Why we ask</b>Decides whether we launch on something you already own or buy and set one up for you.</p>
         <textarea class="answer tall" id="W1" name="W1" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -967,8 +1001,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="W2">What should a visitor do on the site?</label>
         <p class="q-hint">Pick one: call you, fill out a form, download a line sheet, book a meeting.</p>
+        <p class="q-why"><b>Why we ask</b>One goal per site. Naming it up front is the difference between a site that works and a brochure.</p>
         <textarea class="answer tall" id="W2" name="W2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     <div class="q">
@@ -976,8 +1011,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       <div class="q-body">
         <label class="q-text" for="W3">Should website leads land in the CRM automatically?</label>
         <p class="q-hint">And who gets the notification?</p>
+        <p class="q-why"><b>Why we ask</b>Tells us whether to build the bridge between the two, and whose phone it lights up.</p>
         <textarea class="answer tall" id="W3" name="W3" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
+          data-star="false" placeholder="Bullet points are fine&#8230;"></textarea>
       </div>
     </div>
     </div>
