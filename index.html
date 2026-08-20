@@ -701,14 +701,13 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
 
 <div class="progress">
   <div class="progress-inner">
-    <span class="progress-count"><span id="answered">0</span> / 13 answered</span>
+    <span class="progress-count"><span id="answered">0</span> / 10 answered</span>
     <span class="progress-track"><span class="progress-fill" id="bar"></span></span>
     <nav class="sec-nav" aria-label="Jump to section">
       <a href="#sec-A" data-sec="A">A</a>
       <a href="#sec-B" data-sec="B">B</a>
       <a href="#sec-C" data-sec="C">C</a>
       <a href="#sec-D" data-sec="D">D</a>
-      <a href="#sec-E" data-sec="E">E</a>
       <a href="#sec-W" data-sec="W" class="opt">W</a>
     </nav>
     <span class="saved-flag" id="savedFlag">Saved</span>
@@ -727,7 +726,7 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     </div>
     <div class="eyebrow"><span class="dot"></span> Discovery &nbsp;&#183;&nbsp; Tethered Crew</div>
     <h1>Client questionnaire</h1>
-    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your commission math, your line-review calendar &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
+    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your line-review calendar, the software you won't give up &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
     <dl class="howto">
       <div>
         <dt>Who fills this out</dt>
@@ -788,18 +787,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">A2</div>
       <div class="q-body">
-        <label class="q-text" for="A2">How do you get paid?</label>
-        <p class="q-hint">Commission on shipped sales, retainer, project fee, or a mix. No numbers needed — we only need to know whether the system has to do commission math.</p>
-        <textarea class="answer tall" id="A2" name="A2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
-      </div>
-    </div>
-    <div class="q">
-      <div class="q-code">A3</div>
-      <div class="q-body">
-        <label class="q-text" for="A3">Which retailers do you sell into, and how many brands do you represent?</label>
+        <label class="q-text" for="A2">Which retailers do you sell into, and how many brands do you represent?</label>
         <p class="q-hint">Walmart, Sam&#x27;s, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane… a rough count is fine.</p>
-        <textarea class="answer tall" id="A3" name="A3" rows="2"
+        <textarea class="answer tall" id="A2" name="A2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
@@ -823,8 +813,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">B2</div>
       <div class="q-body">
-        <label class="q-text" for="B2">Should anyone be kept from seeing money, or from seeing other people&#x27;s accounts?</label>
-        <p class="q-hint">Commissions, margins, what others earn. If everyone sees everything, just say so.</p>
+        <label class="q-text" for="B2">Should everyone see everything, or should some people only see their own accounts?</label>
+        <p class="q-hint">If it&#x27;s the second, say who&#x27;s limited to what.</p>
         <textarea class="answer tall" id="B2" name="B2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -898,15 +888,15 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
   <section id="sec-D">
     <div class="sec-head">
       <div class="sec-letter">D</div>
-      <h2 class="sec-title">Money</h2>
-      <p class="sec-note">Commission math is the part that&#x27;s different at every firm, and the part that&#x27;s most painful to bolt on afterward.</p>
+      <h2 class="sec-title">Ground rules</h2>
+      <p class="sec-note">What this has to live alongside, and what&#x27;s already been tried.</p>
     </div>
 
     <div class="q">
       <div class="q-code">D1</div>
       <div class="q-body">
-        <label class="q-text" for="D1">How is commission calculated, and when do you get paid?</label>
-        <p class="q-hint">Ballpark is fine for now. Percent of shipped invoice, per unit, tiered, different by client or retailer — plus any exception you&#x27;d have to remember.</p>
+        <label class="q-text" for="D1">What software do you use today, and which of it can&#x27;t change?</label>
+        <p class="q-hint">Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.</p>
         <textarea class="answer tall" id="D1" name="D1" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
@@ -914,34 +904,9 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
     <div class="q">
       <div class="q-code">D2</div>
       <div class="q-body">
-        <label class="q-text" for="D2">What one number do you want to see when you log in?</label>
-        <textarea class="answer" id="D2" name="D2" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
-      </div>
-    </div>
-  </section>
-  <section id="sec-E">
-    <div class="sec-head">
-      <div class="sec-letter">E</div>
-      <h2 class="sec-title">Ground rules</h2>
-      <p class="sec-note">What this has to live alongside, when it has to be ready, and what would make it worth having.</p>
-    </div>
-
-    <div class="q">
-      <div class="q-code">E1</div>
-      <div class="q-body">
-        <label class="q-text" for="E1">What software do you use today, and which of it can&#x27;t change?</label>
-        <p class="q-hint">Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.</p>
-        <textarea class="answer tall" id="E1" name="E1" rows="2"
-          data-star="false" placeholder="Type your answer&#8230;"></textarea>
-      </div>
-    </div>
-    <div class="q">
-      <div class="q-code">E2</div>
-      <div class="q-body">
-        <label class="q-text" for="E2">Have you used a CRM before?</label>
+        <label class="q-text" for="D2">Have you used a CRM before?</label>
         <p class="q-hint">Which one, and what made you stop.</p>
-        <textarea class="answer tall" id="E2" name="E2" rows="2"
+        <textarea class="answer tall" id="D2" name="D2" rows="2"
           data-star="false" placeholder="Type your answer&#8230;"></textarea>
       </div>
     </div>
@@ -1074,7 +1039,7 @@ var navLinks = Array.prototype.slice.call(document.querySelectorAll('.sec-nav a'
 function tally() {
   var n = qFields.filter(function (f) { return f.value.trim(); }).length;
   answeredEl.textContent = n;
-  bar.style.width = (n / 13 * 100) + '%';
+  bar.style.width = (n / 10 * 100) + '%';
   navLinks.forEach(function (a) {
     var sec = document.getElementById('sec-' + a.dataset.sec);
     if (!sec) return;

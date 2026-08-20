@@ -5,13 +5,12 @@ Short answers are fine. "I don't know yet" is a real answer.
 ## A. The business
 
 A1 What does your company do? (One or two sentences is plenty.)
-A2 How do you get paid? (Commission on shipped sales, retainer, project fee, or a mix. No numbers needed — we only need to know whether the system has to do commission math.)
-A3 Which retailers do you sell into, and how many brands do you represent? (Walmart, Sam's, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane… a rough count is fine.)
+A2 Which retailers do you sell into, and how many brands do you represent? (Walmart, Sam's, Target, Kroger, Dollar General, HEB, Costco, UNFI, KeHE, McLane… a rough count is fine.)
 
 ## B. Who's in it
 
 B1 Who would log in? (Names and roles. Mark whoever should be the admin.)
-B2 Should anyone be kept from seeing money, or from seeing other people's accounts? (Commissions, margins, what others earn. If everyone sees everything, just say so.)
+B2 Should everyone see everything, or should some people only see their own accounts? (If it's the second, say who's limited to what.)
 
 ## C. How the work actually runs
 
@@ -20,15 +19,10 @@ C2 List the stages a deal goes through, first conversation to product on the she
 C3 When are your line reviews, and how far ahead do you start working them? (Name the resets or review windows that set your calendar.)
 C4 What falls through the cracks most often? (One example is enough — ideally the last one that cost you.)
 
-## D. Money
+## D. Ground rules
 
-D1 How is commission calculated, and when do you get paid? (Ballpark is fine for now. Percent of shipped invoice, per unit, tiered, different by client or retailer — plus any exception you'd have to remember.)
-D2 What one number do you want to see when you log in?
-
-## E. Ground rules
-
-E1 What software do you use today, and which of it can't change? (Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.)
-E2 Have you used a CRM before? (Which one, and what made you stop.)
+D1 What software do you use today, and which of it can't change? (Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.)
+D2 Have you used a CRM before? (Which one, and what made you stop.)
 
 ## W. If you also want a website (optional)
 

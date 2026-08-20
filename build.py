@@ -553,8 +553,7 @@ NOTES = {
  "A": "The shape of the company. This decides what the system is even counting.",
  "B": "Logins and what each person is allowed to see. Easier to decide now than to unwind later.",
  "C": "Your pipeline in your own vocabulary, and the paperwork around it. We build the stages to match what you say here, not the other way around.",
- "D": "Commission math is the part that's different at every firm, and the part that's most painful to bolt on afterward.",
- "E": "What this has to live alongside, when it has to be ready, and what would make it worth having.",
+ "D": "What this has to live alongside, and what's already been tried.",
  "W": "Only fill this in if a website is part of the job. It's optional \u2014 skip the whole section and nothing about the CRM changes.",
  "H": "",
 }
@@ -564,8 +563,8 @@ OPTIONAL = {"W"}
 for s in sections:
     s["note"] = NOTES.get(s["letter"], "")
 
-TITLES = {"A":"The business","B":"Who's in it","C":"How the work actually runs","D":"Money",
-          "E":"Ground rules","W":"If you also want a website"}
+TITLES = {"A":"The business","B":"Who's in it","C":"How the work actually runs",
+          "D":"Ground rules","W":"If you also want a website"}
 for s in sections:
     s["title"] = TITLES.get(s["letter"], s["title"])
     s["optional"] = s["letter"] in OPTIONAL
@@ -859,7 +858,7 @@ doc = f"""<!doctype html>
     </div>
     <div class="eyebrow"><span class="dot"></span> Discovery &nbsp;&#183;&nbsp; Tethered Crew</div>
     <h1>Client questionnaire</h1>
-    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your commission math, your line-review calendar &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
+    <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your line-review calendar, the software you won't give up &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
     <dl class="howto">
       <div>
         <dt>Who fills this out</dt>

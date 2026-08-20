@@ -1,6 +1,6 @@
 # Client Questionnaire — self-hosted
 
-A single static page that asks a prospective client 13 questions — plus an
+A single static page that asks a prospective client 10 questions — plus an
 optional 3-question website section they opt into with a checkbox — saves
 their progress as they type, and sends the answers to a Google Sheet + your
 inbox. Runs on GitHub Pages (or any static host). No form service, no monthly
@@ -105,7 +105,7 @@ This catches everybody once.
   file uploads on its own request the moment it's picked, so a big spreadsheet
   can't take the answers down with it, and the links survive a closed tab
 - A **Save a copy** button that downloads their answers as a text file
-- Sections A–E, then W. Section W is optional and collapsed by default: it only opens if they tick
+- Sections A–D, then W. Section W is optional and collapsed by default: it only opens if they tick
   "a website is part of this", and it never counts against the progress bar
 - If the send fails, a clear recovery path instead of a lost hour of typing
 
