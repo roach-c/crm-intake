@@ -1,4 +1,4 @@
-# Before We Build Your CRM — Discovery Questionnaire
+# Client Questionnaire
 
 Short answers are fine. "I don't know yet" is a real answer.
 ★ = if you only have 15 minutes, answer these.

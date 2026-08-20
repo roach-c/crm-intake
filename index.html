@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Before We Build Your CRM</title>
-<meta name="description" content="A short discovery questionnaire so your CRM gets built around how you actually work.">
+<title>Client Questionnaire</title>
+<meta name="description" content="A short questionnaire so what we build gets built around how you actually work.">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -644,8 +644,8 @@ section.optional .sec-letter { background: var(--bg); color: var(--text-faint); 
       </svg>
       <span class="mark-word">Tethered&nbsp;Crew</span>
     </div>
-    <div class="eyebrow"><span class="dot"></span> Discovery questionnaire &nbsp;&#183;&nbsp; CRM build</div>
-    <h1>Before we build your CRM</h1>
+    <div class="eyebrow"><span class="dot"></span> Discovery &nbsp;&#183;&nbsp; Tethered Crew</div>
+    <h1>Client questionnaire</h1>
     <p class="standfirst">Everything below exists so the system gets built around how you actually work &mdash; your stages, your commission math, your line-review calendar &mdash; instead of a generic sales pipeline you'd have to fight. Short answers are fine. &ldquo;I don't know yet&rdquo; is a real answer and tells us something too.</p>
     <dl class="howto">
       <div>
@@ -1268,7 +1268,7 @@ fields.forEach(function (f) {
 
 /* ---- plain-text transcript ---- */
 function transcript() {
-  var out = ['BEFORE WE BUILD YOUR CRM \u2014 answers', ''];
+  var out = ['CLIENT QUESTIONNAIRE \u2014 answers', ''];
   out.push('Name:    ' + form._name.value);
   out.push('Company: ' + form._company.value);
   out.push('Email:   ' + form._email.value);
@@ -1293,7 +1293,7 @@ document.getElementById('copyBtn').addEventListener('click', function () {
   var blob = new Blob([transcript()], { type: 'text/plain' });
   var a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'crm-questionnaire-' + (form._company.value.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'answers') + '.txt';
+  a.download = 'client-questionnaire-' + (form._company.value.replace(/[^a-z0-9]+/gi, '-').toLowerCase() || 'answers') + '.txt';
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
