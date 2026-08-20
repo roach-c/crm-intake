@@ -77,6 +77,6 @@ W6 Should leads from the site's contact form land straight in the CRM as a new r
 
 ## Last one
 
-Six months after this is running, what has changed about your week? Describe a specific thing you no longer have to do.
+What would make this a win for you — and what would make you regret it? Both answers are useful, and the second one more than the first.
 
 Completed by: ______________  Company: ______________  Date: ______
