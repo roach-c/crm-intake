@@ -29,8 +29,7 @@ D2 What one number do you want to see when you log in?
 
 E1 What software do you use today, and which of it can't change? (Retail Link, Luminate, NIQ or Circana, Excel, QuickBooks, Google Workspace or Outlook, Dropbox, DocuSign, EDI providers.)
 E2 Have you used a CRM before? (Which one, and what made you stop.)
-E3 When do you need this live? (Is there a hard date — a line review, a trade show, year end?)
-E4 If version one only did three things, which three?
+E3 If version one only did three things, which three?
 
 ## W. If you also want a website (optional)
 
