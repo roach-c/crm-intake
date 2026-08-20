@@ -1,6 +1,7 @@
 # CRM Discovery Questionnaire — self-hosted
 
-A single static page that asks a prospective CRM client 41 questions, saves
+A single static page that asks a prospective CRM client 41 questions — plus an
+optional 6-question website section they opt into with a checkbox — saves
 their progress as they type, and sends the answers to a Google Sheet + your
 inbox. Runs on GitHub Pages (or any static host). No form service, no monthly
 cost, no third-party account beyond the Google one you already have.
@@ -102,22 +103,16 @@ This catches everybody once.
   come back; nothing is lost
 - A **Save a copy** button that downloads their answers as a text file
 - Stars marking the 21 questions that matter most, so a 15-minute pass is viable
+- Section W is optional and collapsed by default: it only opens if they tick
+  "a website is part of this", and it never counts against the progress bar
 - If the send fails, a clear recovery path instead of a lost hour of typing
 
 ## What you get
 
-- One row per submission on the Sheet, one column per question code
+- One row per submission on the Sheet, one column per question code, plus a
+  `Website?` column saying whether they opted into section W
 - An email with only the answered questions, formatted to actually read,
   with reply-to set to the person who filled it out
-
----
-
-## Changing the questions
-
-`index.html` is generated but perfectly editable by hand. If you add or remove
-a question, keep the `id`/`name` on the textarea matching its code (`D8`, etc.)
-and add that same code to the `CODES` and `LABELS` lists in `Code.gs` so the
-column lines up.
 
 ---
 
@@ -131,3 +126,10 @@ column lines up.
 
 `build.py` also holds the stylesheet and the page markup, so design changes go
 there too. Re-running it reproduces `index.html` byte for byte.
+
+If you add or remove a question, add the same code to the `CODES` and `LABELS`
+lists in `Code.gs` so the Sheet column lines up — append new codes at the **end**
+of `CODES`, never in the middle, or every column shifts under the rows already
+there. `getSheet_` widens the header row on the next submission. To make a whole
+section opt-in like the website one, add its letter to `OPTIONAL` in `build.py`
+and to `OPTIONAL_CODES` in `Code.gs`.

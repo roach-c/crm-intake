@@ -526,14 +526,14 @@ base_css = TC_CSS
 # ---- parse the questionnaire source ----
 sections, cur = [], None
 for ln in open(SRC_MD).read().splitlines():
-    m = re.match(r'^## ([A-G])\. (.+)$', ln)
+    m = re.match(r'^## ([A-Z])\. (.+)$', ln)
     if m:
         cur = {"letter": m.group(1), "title": m.group(2), "note": "", "qs": []}
         sections.append(cur); continue
     if ln.startswith("## Last one"):
         cur = {"letter": "H", "title": "One last one", "note": "", "qs": []}
         sections.append(cur); continue
-    q = re.match(r'^([A-G]\d+) (★ )?(.+)$', ln)
+    q = re.match(r'^([A-Z]\d+) (★ )?(.+)$', ln)
     if q and cur:
         code, star, text = q.group(1), bool(q.group(2)), q.group(3).strip()
         hint = ""
@@ -553,23 +553,32 @@ NOTES = {
  "E": "Commission math is the part that's different at every firm, and the part that's most painful to bolt on afterward.",
  "F": "What the system should chase you about, and what it should hand you at the end of the month.",
  "G": "What this has to live alongside, what has to come across from the old way, and what the real constraints are.",
+ "W": "Only fill this in if a website is part of the job. It's optional \u2014 skip the whole section and nothing about the CRM changes.",
  "H": "",
 }
+
+# sections that are opt-in: hidden behind a toggle, excluded from the count
+OPTIONAL = {"W"}
 for s in sections:
     s["note"] = NOTES.get(s["letter"], "")
 
 TITLES = {"A":"The business","B":"Who's in it","C":"What you keep track of","D":"How a deal moves",
-          "E":"Money","F":"Reminders and reporting","G":"Systems and ground rules","H":"One last one"}
+          "E":"Money","F":"Reminders and reporting","G":"Systems and ground rules",
+          "W":"If you also want a website","H":"One last one"}
 for s in sections:
     s["title"] = TITLES.get(s["letter"], s["title"])
+    s["optional"] = s["letter"] in OPTIONAL
 
-total_q = sum(len(s["qs"]) for s in sections)
+# the counter and the progress bar only track the questions everyone answers
+total_q = sum(len(s["qs"]) for s in sections if not s["optional"])
+opt_codes = [q["code"] for s in sections if s["optional"] for q in s["qs"]]
 
 # ---- markup ----
 def esc(t): return html.escape(t, quote=True)
 
 nav = "\n".join(
-    f'      <a href="#sec-{s["letter"]}" data-sec="{s["letter"]}">{s["letter"]}</a>'
+    f'      <a href="#sec-{s["letter"]}" data-sec="{s["letter"]}"'
+    f'{" class=\"opt\"" if s["optional"] else ""}>{s["letter"]}</a>'
     for s in sections)
 
 blocks = []
@@ -588,7 +597,25 @@ for s in sections:
       </div>
     </div>""")
     note = f'\n      <p class="sec-note">{esc(s["note"])}</p>' if s["note"] else ""
-    blocks.append(f"""  <section id="sec-{s['letter']}">
+    if s["optional"]:
+        blocks.append(f"""  <section id="sec-{s['letter']}" class="optional">
+    <div class="sec-head">
+      <div class="sec-letter">{s['letter']}</div>
+      <h2 class="sec-title">{esc(s['title'])} <span class="opt-tag">Optional</span></h2>{note}
+    </div>
+
+    <label class="opt-switch" for="wantSite">
+      <input type="checkbox" id="wantSite">
+      <span class="opt-box" aria-hidden="true"></span>
+      <span class="opt-label">Yes &#8212; a website is part of this. Show me those questions.</span>
+    </label>
+
+    <div class="opt-body" id="siteQs" hidden>
+{chr(10).join(qs)}
+    </div>
+  </section>""")
+    else:
+        blocks.append(f"""  <section id="sec-{s['letter']}">
     <div class="sec-head">
       <div class="sec-letter">{s['letter']}</div>
       <h2 class="sec-title">{esc(s['title'])}</h2>{note}
@@ -597,7 +624,79 @@ for s in sections:
 {chr(10).join(qs)}
   </section>""")
 
-extra_css = ""
+extra_css = r'''
+/* ---------- the optional section ---------- */
+
+section.optional .sec-letter { background: var(--bg); color: var(--text-faint); border: 1px solid var(--border-strong); }
+
+.opt-tag {
+  font-family: var(--f-code);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  padding: 0.2rem 0.42rem;
+  vertical-align: 0.28em;
+  white-space: nowrap;
+}
+
+.opt-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  cursor: pointer;
+  padding: 0.85rem 1rem;
+  background: var(--bg-raised);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+  max-width: var(--measure);
+}
+
+.opt-switch input { position: absolute; opacity: 0; width: 0; height: 0; }
+
+.opt-box {
+  flex: none;
+  width: 1.05rem;
+  height: 1.05rem;
+  background: var(--write);
+  border: 1px solid var(--border-strong);
+  border-radius: 2px;
+  position: relative;
+  transition: background 0.15s var(--ease), border-color 0.15s var(--ease);
+}
+
+.opt-box::after {
+  content: "";
+  position: absolute;
+  left: 0.32rem;
+  top: 0.11rem;
+  width: 0.28rem;
+  height: 0.55rem;
+  border: solid var(--bg-raised);
+  border-width: 0 2px 2px 0;
+  transform: rotate(42deg) scale(0.6);
+  opacity: 0;
+  transition: opacity 0.15s var(--ease), transform 0.15s var(--ease);
+}
+
+.opt-switch input:checked ~ .opt-box { background: var(--accent); border-color: var(--accent); }
+.opt-switch input:checked ~ .opt-box::after { opacity: 1; transform: rotate(42deg) scale(1); }
+.opt-switch input:focus-visible ~ .opt-box { box-shadow: 0 0 0 3px var(--accent-wash); }
+
+.opt-label { font-size: 0.97rem; line-height: 1.45; color: var(--text-muted); }
+.opt-switch input:checked ~ .opt-label { color: var(--text); }
+
+.opt-body { display: flex; flex-direction: column; gap: 1.5rem; }
+.opt-body[hidden] { display: none; }
+
+.sec-nav a.opt { color: var(--text-faint); }
+.sec-nav a.opt.done { color: var(--accent); }
+
+@media print { .opt-switch { border-style: solid; background: #fff; } }
+'''
 
 doc = f"""<!doctype html>
 <html lang="en">
@@ -727,8 +826,13 @@ var ENDPOINT = "https://script.google.com/macros/s/AKfycbzeNeSs0bf-UC0C9vym-jyME
 
 var form   = document.getElementById('intake');
 var fields = Array.prototype.slice.call(form.querySelectorAll('textarea, input'));
-fields = fields.filter(function (f) {{ return f.name !== '_website'; }});
-var qFields = fields.filter(function (f) {{ return f.tagName === 'TEXTAREA'; }});
+fields = fields.filter(function (f) {{ return f.name !== '_website' && f.id !== 'wantSite'; }});
+var OPTIONAL_CODES = {json.dumps(opt_codes)};
+var qFields = fields.filter(function (f) {{
+  return f.tagName === 'TEXTAREA' && OPTIONAL_CODES.indexOf(f.name) === -1;
+}});
+var wantSite = document.getElementById('wantSite');
+var siteQs   = document.getElementById('siteQs');
 var KEY = 'crm-intake-v1';
 
 /* ---- autosize ---- */
@@ -747,6 +851,7 @@ function restore() {{
   fields.forEach(function (f) {{
     if (data[f.name]) f.value = data[f.name];
   }});
+  if (wantSite && data.__wantSite) wantSite.checked = true;
 }}
 
 /* ---- save ---- */
@@ -756,6 +861,7 @@ var flag = document.getElementById('savedFlag');
 function save() {{
   var data = {{}};
   fields.forEach(function (f) {{ if (f.value.trim()) data[f.name] = f.value; }});
+  if (wantSite && wantSite.checked) data.__wantSite = true;
   try {{ localStorage.setItem(KEY, JSON.stringify(data)); }} catch (e) {{ return; }}
   flag.classList.add('show');
   clearTimeout(saveTimer);
@@ -775,13 +881,35 @@ function tally() {{
     var sec = document.getElementById('sec-' + a.dataset.sec);
     if (!sec) return;
     var tas = Array.prototype.slice.call(sec.querySelectorAll('textarea'));
+    var skip = sec.classList.contains('optional') && (!wantSite || !wantSite.checked);
     var filled = tas.filter(function (t) {{ return t.value.trim(); }}).length;
-    a.classList.toggle('done', filled === tas.length && tas.length > 0);
+    a.classList.toggle('done', !skip && filled === tas.length && tas.length > 0);
+  }});
+}}
+
+/* ---- optional section ---- */
+function syncSite() {{
+  if (!wantSite || !siteQs) return;
+  siteQs.hidden = !wantSite.checked;
+  if (wantSite.checked) {{
+    Array.prototype.slice.call(siteQs.querySelectorAll('textarea')).forEach(autosize);
+  }}
+}}
+
+if (wantSite) {{
+  wantSite.addEventListener('change', function () {{
+    syncSite();
+    save();
+    tally();
+    if (wantSite.checked) {{
+      siteQs.querySelector('textarea').focus({{ preventScroll: true }});
+    }}
   }});
 }}
 
 /* ---- wire up ---- */
 restore();
+syncSite();
 qFields.forEach(autosize);
 tally();
 
@@ -802,6 +930,7 @@ function transcript() {{
   out.push('Email:   ' + form._email.value);
   out.push('');
   document.querySelectorAll('form section').forEach(function (sec) {{
+    if (sec.classList.contains('optional') && (!wantSite || !wantSite.checked)) return;
     var t = sec.querySelector('.sec-title');
     var tas = sec.querySelectorAll('textarea');
     if (!tas.length) return;
@@ -850,8 +979,16 @@ form.addEventListener('submit', function (e) {{
     return;
   }}
 
-  var payload = {{ _submittedAt: new Date().toISOString(), _transcript: transcript() }};
-  fields.forEach(function (f) {{ payload[f.name] = f.value.trim(); }});
+  var wantsSite = !!(wantSite && wantSite.checked);
+  var payload = {{
+    _submittedAt: new Date().toISOString(),
+    _wantsWebsite: wantsSite ? 'Yes' : 'No',
+    _transcript: transcript()
+  }};
+  fields.forEach(function (f) {{
+    if (!wantsSite && OPTIONAL_CODES.indexOf(f.name) !== -1) return;
+    payload[f.name] = f.value.trim();
+  }});
 
   btn.disabled = true;
   status.className = 'status';

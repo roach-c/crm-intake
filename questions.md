@@ -64,6 +64,17 @@ G6 ★ When do you need this live, and is there a date that actually matters —
 G7 What budget range are you working with — one-time build, monthly, or both?
 G8 ★ If the first version only did three things, and did them perfectly, which three?
 
+## W. If you also want a website (optional)
+
+Skip this whole section if a website isn't part of this — nothing here affects the CRM.
+
+W1 Do you already own a domain? Who has the login for it, and is anything live there today? (registrar, host, an old site nobody updates)
+W2 If a visitor does exactly one thing on the site, what should it be — call you, fill out a form, download a line sheet, book a meeting?
+W3 Which brands and retailers can you name and show publicly, and which are under NDA or otherwise off-limits?
+W4 What already exists that we can use? (logo files, headshots, product photography, capabilities deck, case studies, testimonials, trade-show booth art)
+W5 Who updates the site after launch — us, someone on your staff, or do you want to be able to edit it yourself without calling anybody?
+W6 Should leads from the site's contact form land straight in the CRM as a new record, and who gets pinged when one comes in?
+
 ## Last one
 
 Six months after this is running, what has changed about your week? Describe a specific thing you no longer have to do.
